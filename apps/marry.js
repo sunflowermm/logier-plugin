@@ -45,7 +45,7 @@ export class example extends plugin {
     }
 
     if (marrydata?.lastmarryDate === date_time) {
-      await renderMarry(e, `今天已经迎娶【${marrydata.lastmarry.nickname}】了哦~`, marrydata.lastmarry)
+      await renderMarry(e, `\n今天已经迎娶【${marrydata.lastmarry.nickname}】了哦~`, marrydata.lastmarry)
       return true
     }
 
@@ -92,7 +92,7 @@ async function renderMarry (e, replyMessage, wife) {
     footerText: '',
     mediaOverlay: mediaAvatarOverlay(avatarUrl),
     titleLines: `<h2>今日老婆</h2><p class="wife-name">${escHtml(wife.nickname)}</p>`,
-    bodyHtml: `<div class="body"><p>${escHtml(content)}</p></div>`
+    bodyHtml: `<div class="body fortune"><p>${escHtml(content)}</p></div>`
   })
 
   const img = await renderHtmlImage(html, { ...CANVAS_SPLIT, imageWaitTimeout: 5000 })

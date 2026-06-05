@@ -78,8 +78,7 @@ async function renderGua (e, data) {
 
   const html = fortuneSplitHtml({
     filePath,
-    bodyMode: 'gua',
-    titleLines: `<p>${escHtml(nickname)}心中所念${escHtml(topicLine)}</p><p>卦象如下</p><h2>${escHtml(fortune.name)}</h2><p>${escHtml(fortune.guachi)}</p>`,
+    titleLines: `<p class="sub">${escHtml(nickname)}心中所念${escHtml(topicLine)}</p><p class="sub">卦象如下</p><h2>${escHtml(fortune.name)}</h2><p class="sub">${escHtml(fortune.guachi)}</p>`,
     bodyHtml: guaBodyHtml(fortune)
   })
 
