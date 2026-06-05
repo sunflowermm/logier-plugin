@@ -9,7 +9,7 @@ export class ql_help extends plugin {
       name: '[鸢尾花插件]鸢尾花帮助',
       dsc: '鸢尾花帮助',
       event: 'message',
-      priority: 1000,
+      priority: 5000,
       rule: [
         {
           reg: '^#?(logier|鸢尾花|yuanweihua|iris|鸢尾|yuanwei)(帮助|help|指令|菜单|命令)$',

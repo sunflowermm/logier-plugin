@@ -1,5 +1,6 @@
 import { screenshotHtmlWithFallback } from '../components/renderer.js'
-import { readAndParseJSON, numToChinese, getLocalGalleryImage, pluginAssetUrl } from '../utils/getdate.js'
+import { readAndParseJSON, numToChinese } from '../utils/getdate.js'
+import { pickRenderBackground, fortuneSplitHtml } from '../utils/render-layout.js'
 
 const REDIS_KEY = (uid) => `Yunzai:logier-plugin:${uid}_jrys`
 
@@ -69,34 +70,16 @@ export class TextMsg extends plugin {
 }
 
 async function renderFortune (e, data) {
-  const imageUrl = await getLocalGalleryImage()
+  const filePath = pickRenderBackground('fortune')
   const nickname = e.nickname || e.sender?.card || '旅人'
   const fortune = data.fortune
   const dayCn = await numToChinese(new Date().getDate())
 
-  const html = `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<style>
-@font-face { font-family: 'HYWH'; src: url('${pluginAssetUrl('resources/common/font/HYWH-65W.woff')}') format('woff'); }
-html, body { margin: 0; font-family: 'HYWH', 'Microsoft YaHei', sans-serif; line-height: 2; background: rgba(255,255,255,0.6); }
-.fortune { width: 30%; height: 65rem; float: left; text-align: center; background: rgba(255,255,255,0.6); }
-.content { margin: 0 auto; padding: 12px; height: 49rem; background: rgba(255,255,255,0.6); border-radius: 15px; box-shadow: 0 0 15px rgba(0,0,0,0.3); writing-mode: vertical-lr; }
-.image { height: 65rem; width: 70%; float: right; box-shadow: 0 0 15px rgba(0,0,0,0.3); text-align: center; }
-.image img { height: 100%; }
-</style>
-</head>
-<body>
-<div class="fortune">
-  <p>${nickname}的${dayCn}号运势为</p>
-  <h2>${fortune.fortuneSummary}</h2>
-  <p>${fortune.luckyStar}</p>
-  <div class="content"><p>${fortune.signText}</p><p>${fortune.unsignText}</p></div>
-  <p>| 相信科学，请勿迷信 |</p>
-</div>
-<div class="image"><img src="${imageUrl}" /></div>
-</body>
-</html>`
+  const html = fortuneSplitHtml({
+    filePath,
+    titleLines: `<p>${nickname}的${dayCn}号运势为</p><h2>${fortune.fortuneSummary}</h2><p>${fortune.luckyStar}</p>`,
+    bodyHtml: `<div class="body"><p>${fortune.signText}</p><p>${fortune.unsignText}</p></div>`
+  })
 
   const fallback = [
     segment.at(e.user_id),

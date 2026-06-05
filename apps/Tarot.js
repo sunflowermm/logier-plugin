@@ -36,7 +36,7 @@ export class TextMsg extends plugin {
       name: '[鸢尾花插件]塔罗牌',
       dsc: '塔罗牌占卜与牌阵',
       event: 'message',
-      priority: 5000,
+      priority: -5000,
       rule: [
         { reg: '^#塔罗帮助$', fnc: '塔罗帮助' },
         { reg: '^#牌阵列表$', fnc: '牌阵列表' },

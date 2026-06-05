@@ -41,7 +41,8 @@ git clone --depth=1 https://github.com/sunflowermm/logier-plugin ./plugins/logie
 
 | 目录 | 用途 | 来源 |
 |------|------|------|
-| `resources/gallery/` | 运势/算卦/签到等随机背景（27+ 张） | 插件自带 + [BJT-Template](https://github.com/SmallK111407/BJT-Template)（MIT） |
+| `resources/gallery/` | 运势/算卦/签到等随机背景（60+ 张，按画幅智能选取） | 插件自带 + [BJT-Template](https://github.com/SmallK111407/BJT-Template)（MIT） |
+| `resources/help/bg.png` | 帮助页全屏背景（3840×2160，`cover` 铺满） | 源自 gallery 本地图 |
 | `resources/tarot/cards/` | 78 张塔罗牌面 | 本地化牌图（语义文件名 `a0`–`a21`、`s1`–`s14` 等） |
 | `data/jrys.json` | 今日运势文案 | 参考 [koishi-plugin-jryspro](https://github.com/Twiyin0/koishi-plugin-jryspro) |
 | `data/suangua.json` | 算卦文案 | 插件本地数据 |

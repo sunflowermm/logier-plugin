@@ -41,7 +41,7 @@ function buildRenderData (params, renderOpts = {}, scale = 1) {
     priority: true,
     sys: {
       scale: `style=transform:scale(${scale})`,
-      copyright: `欢迎加QQ交流群：1037125467<br>XRK-Yunzai<span class="version">${Version.yunzai}</span> & 鸢尾花插件<span class="version">${Version.ver}</span>`
+      copyright: `XRK-Yunzai<span class="version">${Version.yunzai}</span> & 鸢尾花插件<span class="version">${Version.ver}</span> · 向日葵维护版`
     }
   }
 }

@@ -5,7 +5,8 @@ export class outNotice extends plugin {
         super({
             name: '退群通知',
             dsc: 'xx退群了',
-            event: 'notice.group.decrease'
+            event: 'notice.group.decrease',
+            priority: 4999
         })
         /** 退群提示词 */
         this.tips = '永久的离开了我们'

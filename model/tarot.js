@@ -20,12 +20,32 @@ const PAIR_LABELS = ['现状', '指引']
 const formations = tarotData.formations
 const cards = tarotData.cards
 
-function cardFile (cardKey) {
-  const image = cards[cardKey]?.image
-  if (image) {
-    const file = path.join(CARD_DIR, image)
-    if (fs.existsSync(file)) return file
+const SUIT_PREFIX = { Swords: 's', Wands: 'w', Cups: 'c', Pentacles: 'p' }
+const COURT_NUM = { 侍从: 11, 骑士: 12, 王后: 13, 国王: 14 }
+
+function resolveImageName (key, card) {
+  if (card?.image) return card.image
+  const n = Number(key)
+  if (card?.type === 'MajorArcana' && n >= 0 && n <= 21) return `a${n}.webp`
+  const prefix = SUIT_PREFIX[card?.type]
+  if (!prefix) return 'a0.webp'
+  const cn = card.name_cn || ''
+  for (const [name, num] of Object.entries(COURT_NUM)) {
+    if (cn.includes(name)) return `${prefix}${num}.webp`
   }
+  const picNum = card.pic?.match(/-0*(\d+)/)
+  if (picNum) return `${prefix}${parseInt(picNum[1], 10)}.webp`
+  const cnNum = cn.match(/(?:宝剑|权杖|圣杯|星币)(\d{1,2})$/)
+  if (cnNum) return `${prefix}${parseInt(cnNum[1], 10)}.webp`
+  if (/ACE/i.test(cn)) return `${prefix}1.webp`
+  return `${prefix}1.webp`
+}
+
+function cardFile (cardKey) {
+  const card = cards[cardKey]
+  const image = resolveImageName(cardKey, card)
+  const file = path.join(CARD_DIR, image)
+  if (fs.existsSync(file)) return file
   return path.join(CARD_DIR, 'a0.webp')
 }
 function cardImageUrl (cardKey) {

@@ -10,7 +10,7 @@ export class ql_update extends plugin {
       name: '[鸢尾花插件]更新',
       dsc: '更新',
       event: 'message',
-      priority: 2000,
+      priority: 3000,
       rule: [
         {
           reg: '^#?(鸢尾花)(插件)?(强制)?更新$',

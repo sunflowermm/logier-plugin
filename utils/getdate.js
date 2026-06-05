@@ -3,6 +3,7 @@ import fs from 'node:fs'
 import { pathToFileURL, fileURLToPath } from 'url'
 import { FileUtils } from '../../../lib/utils/file-utils.js'
 import { pluginRoot } from '../model/path.js'
+import { pickGalleryFile, toFileUrl } from './gallery-image.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const GALLERY_DIR = path.join(pluginRoot, 'resources/gallery')
@@ -13,10 +14,14 @@ export function pluginAssetUrl (relativePath) {
 }
 
 /** 仅从插件本地 gallery 取背景图，不访问任何外部 API */
-export async function getLocalGalleryImage (subdir = '') {
-  const dir = subdir ? path.join(GALLERY_DIR, subdir) : GALLERY_DIR
-  const imageUrl = await getRandomUrl(dir)
-  return toLocalFileUrl(imageUrl)
+export async function getLocalGalleryImage (opts = {}) {
+  if (typeof opts === 'string') {
+    const dir = path.join(GALLERY_DIR, opts)
+    const file = await getRandomUrl(dir)
+    return toFileUrl(file)
+  }
+  const file = pickGalleryFile(opts)
+  return toFileUrl(file)
 }
 
 export async function readAndParseJSON (filePath) {
@@ -94,11 +99,4 @@ export async function getRandomUrl (imageUrls) {
   }
 
   return imageUrl
-}
-
-function toLocalFileUrl (imageUrl) {
-  if (FileUtils.existsSync(imageUrl)) {
-    return pathToFileURL(path.resolve(imageUrl)).href
-  }
-  return pathToFileURL(path.join(GALLERY_DIR, '92095127.webp')).href
 }

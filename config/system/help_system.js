@@ -1,10 +1,7 @@
 export const helpCfg = {
-  themeSet: false,
   title: '鸢尾花帮助',
   subTitle: 'XRK-Yunzai & 鸢尾花插件',
   colWidth: 265,
-  theme: 'all',
-  themeExclude: ['default'],
   colCount: 3,
   bgBlur: true
 }

@@ -1,5 +1,6 @@
 import { screenshotHtmlWithFallback } from '../components/renderer.js'
-import { getTimeOfDay, getLocalGalleryImage } from '../utils/getdate.js'
+import { getTimeOfDay } from '../utils/getdate.js'
+import { pickRenderBackground, signCardHtml } from '../utils/render-layout.js'
 
 const SIGN_QUOTES = [
   '生活明朗，万物可爱。',
@@ -15,7 +16,7 @@ export class TextMsg extends plugin {
       name: '[鸢尾花插件]今日签到',
       dsc: '今日签到',
       event: 'message',
-      priority: 5000,
+      priority: -5000,
       rule: [
         { reg: '^#?(今日)?(签到|打卡)$', fnc: '今日签到' }
       ]
@@ -26,7 +27,7 @@ export class TextMsg extends plugin {
     const now = new Date()
     const datatime = now.toLocaleDateString('zh-CN')
     const content = SIGN_QUOTES[Math.floor(Math.random() * SIGN_QUOTES.length)]
-    const imageUrl = await getLocalGalleryImage()
+    const filePath = pickRenderBackground('sign')
 
     let data = JSON.parse(await redis.get(`Yunzai:logier-plugin:${e.user_id}_sign`) || 'null')
     const addfavor = Math.floor(Math.random() * 10) + 1
@@ -52,29 +53,13 @@ export class TextMsg extends plugin {
     const position = favorValues.indexOf(data.favor) + 1
     const nickname = e.nickname || e.sender?.card || '旅人'
 
-    const html = `<!DOCTYPE html>
-<html lang="zh">
-<head>
-<style>
-body { margin: 0; font-family: 'Microsoft YaHei', sans-serif; background: #f5f5f5; color: #333; }
-#main { width: 800px; margin: 20px auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: #fff; overflow: hidden; }
-#header { padding: 20px; background: linear-gradient(135deg, #f0f8ff, #cce7ff); }
-#header span { font-size: 1.2rem; font-weight: bold; color: #0078d7; }
-#content { padding: 20px; text-align: center; }
-#content img { width: 100%; border-radius: 10px; margin: 10px 0; }
-.quote { font-style: italic; color: #777; }
-#footer { padding: 20px; background: #f8f9fa; text-align: center; border-top: 1px solid #eee; }
-.highlight { font-weight: bold; color: #0078d7; }
-</style>
-</head>
-<body>
-<div id="main">
-  <div id="header"><p><span>${getTimeOfDay()}好！</span>${nickname}</p><p>${issign}</p></div>
-  <div id="content"><div>${datatime}</div><img src="${imageUrl}" /><p class="quote">「${content}」</p></div>
-  <div id="footer">当前好感度：<span class="highlight">${data.favor}</span>，群排名：<span class="highlight">第${position}位</span></div>
-</div>
-</body>
-</html>`
+    const html = signCardHtml({
+      filePath,
+      header: `<p><span>${getTimeOfDay()}好！</span>${nickname}</p><p>${issign}</p>`,
+      date: datatime,
+      quote: content,
+      footer: `当前好感度：<span class="highlight">${data.favor}</span>，群排名：<span class="highlight">第${position}位</span>`
+    })
 
     const fallback = `${nickname} ${issign}\n好感度 ${data.favor}，群排名第 ${position} 位\n「${content}」`
     await screenshotHtmlWithFallback(e, html, fallback)
