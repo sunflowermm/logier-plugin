@@ -1,0 +1,115 @@
+.tarot-card {
+  width: 100%;
+  padding: 20px 22px 18px;
+  box-sizing: border-box;
+}
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.card-tag {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.42);
+}
+
+.card-name {
+  margin: 0;
+  font-size: 36px;
+  line-height: 1.2;
+}
+
+.card-meta {
+  margin: 6px 0 0;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.pos-badge {
+  flex-shrink: 0;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #ece8ff;
+  color: #5a4690;
+  font-size: 22px;
+}
+
+.pos-badge.is-rev {
+  background: #ffe8ef;
+  color: #90465a;
+}
+
+.pos-badge.is-lookup {
+  background: #e8f0ec;
+  color: #466a55;
+}
+
+.card-body {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.meaning-box {
+  flex: 1;
+  min-width: 0;
+  max-width: 42%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 14px;
+  min-height: calc(var(--frame-w, 318px) * 1.7);
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.meaning-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 20px;
+  line-height: 1.85;
+  max-height: calc(var(--frame-w, 318px) * 1.7 - 36px);
+  color: rgba(0, 0, 0, 0.72);
+  white-space: pre-wrap;
+}
+
+.card-figure {
+  flex: 0 0 auto;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-foot {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 14px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: rgba(0, 0, 0, 0.62);
+  white-space: pre-wrap;
+  max-height: 240px;
+  overflow: hidden;
+}
+
+.tarot-card.is-lookup .meaning-vertical {
+  writing-mode: horizontal-tb;
+  max-height: none;
+  font-size: 16px;
+  text-align: left;
+}
+
+.tarot-card.is-lookup .card-foot {
+  max-height: 320px;
+}

@@ -1,0 +1,37 @@
+{{extend defaultLayout}}
+
+{{block 'css'}}
+<link rel="stylesheet" type="text/css" href="{{_res_path}}tarot/base.css"/>
+<link rel="stylesheet" type="text/css" href="{{_res_path}}tarot/card.css"/>
+{{/block}}
+
+{{block 'main'}}
+<div class="tarot-card {{if mode == 'lookup'}}is-lookup{{/if}}">
+  <header class="card-head">
+    <div class="card-head-main">
+      {{if title}}<p class="card-tag">{{title}}</p>{{/if}}
+      <h1 class="card-name">{{nameCn}}</h1>
+      <p class="card-meta">{{nameEn}} · {{typeLabel}}</p>
+    </div>
+    {{if mode == 'lookup'}}
+    <span class="pos-badge is-lookup">{{position}}</span>
+    {{else}}
+    <span class="pos-badge {{if reversed}}is-rev{{/if}}">{{position}}</span>
+    {{/if}}
+  </header>
+  <div class="card-body">
+    <aside class="meaning-box">
+      <div class="meaning-vertical">{{meaning}}</div>
+    </aside>
+    <figure class="card-figure" style="--frame-w: {{cardWidth}}px;">
+      <div class="tarot-card-frame {{if reversed}}is-reversed{{/if}}">
+        <img class="tarot-card-img" src="{{imageUrl}}" alt="{{nameCn}}"/>
+      </div>
+    </figure>
+  </div>
+  {{if description}}
+  <footer class="card-foot">{{description}}</footer>
+  {{/if}}
+  <p class="tarot-watermark">Powered by XRK</p>
+</div>
+{{/block}}

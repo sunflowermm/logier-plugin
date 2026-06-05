@@ -1,0 +1,123 @@
+.tarot-spread {
+  width: 100%;
+  padding: 20px 22px 18px;
+  box-sizing: border-box;
+}
+
+.spread-head {
+  text-align: center;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.spread-tag {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.42);
+}
+
+.spread-name {
+  margin: 0;
+  font-size: 32px;
+}
+
+.spread-count {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.spread-grid {
+  display: grid;
+  gap: 16px;
+  align-items: start;
+}
+
+.spread-grid.layout-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.spread-grid.layout-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.spread-grid.layout-4 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.spread-grid.layout-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.spread-grid.layout-6 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.spread-grid.layout-7 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.spread-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 14px;
+  padding: 12px 10px 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.spread-slot .tarot-card-frame {
+  width: var(--slot-card-w, 188px);
+  margin-bottom: 10px;
+}
+
+.slot-role {
+  width: 100%;
+  min-height: 40px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: center;
+  color: #5a4690;
+}
+
+.spread-grid.is-compact .slot-role {
+  font-size: 13px;
+  min-height: 34px;
+}
+
+.spread-grid.is-compact .slot-name {
+  font-size: 17px;
+}
+
+.spread-grid.is-compact .slot-meaning {
+  font-size: 12px;
+  max-height: 72px;
+}
+
+.slot-name {
+  width: 100%;
+  font-size: 19px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.slot-meta {
+  width: 100%;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.slot-meaning {
+  width: 100%;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.6);
+  text-align: left;
+  max-height: 96px;
+  overflow: hidden;
+}
