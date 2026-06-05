@@ -29,7 +29,7 @@
 在 Yunzai / XRK-Yunzai 根目录执行：
 
 ```bash
-git clone --depth=1 <本仓库地址> ./plugins/logier-plugin/
+git clone --depth=1 https://github.com/sunflowermm/logier-plugin ./plugins/logier-plugin/
 ```
 
 或使用原作者仓库（功能与上游可能不同）：
@@ -60,7 +60,7 @@ git clone --depth=1 https://github.com/logier/logier-plugins.git ./plugins/logie
 - [今日运势源仓库](https://github.com/twiyin0/koishi-plugin-jryspro)
 - [云崽插件基础示例](https://gitee.com/Zyy955/Miao-Yunzai-plugin)
 - [云崽市场](https://gitee.com/yhArcadia/Yunzai-Bot-plugins-indexn)
-- [向日葵插件](https://gitee.com/xrk114514/xrk-plugin)
+- [向日葵插件](https://github.com/sunflowermm/XRK-plugin)
 
 ## 许可
 
