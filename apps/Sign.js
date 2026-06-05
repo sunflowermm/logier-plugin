@@ -27,7 +27,7 @@ export class TextMsg extends plugin {
     const now = new Date()
     const datatime = now.toLocaleDateString('zh-CN')
     const content = SIGN_QUOTES[Math.floor(Math.random() * SIGN_QUOTES.length)]
-    const filePath = pickRenderBackground('sign')
+    const filePath = pickRenderBackground()
 
     let data = JSON.parse(await redis.get(`Yunzai:logier-plugin:${e.user_id}_sign`) || 'null')
     const addfavor = Math.floor(Math.random() * 10) + 1

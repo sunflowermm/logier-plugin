@@ -46,6 +46,22 @@ function buildRenderData (params, renderOpts = {}, scale = 1) {
   }
 }
 
+/** @ 触发者，与图片等同条消息发出 */
+export function atUser (e) {
+  return segment.at(e.user_id)
+}
+
+/** 合并 @、可选前缀文案与图片为一条消息 */
+export async function replyAtImage (e, img, prefix) {
+  const msg = [atUser(e)]
+  if (prefix != null && prefix !== '') {
+    if (Array.isArray(prefix)) msg.push(...prefix.filter(p => p != null && p !== ''))
+    else msg.push(prefix)
+  }
+  msg.push(img)
+  return e.reply(msg)
+}
+
 /**
  * 内联 HTML 截图：经 inline.html（{{@html}}）注入，避免整页 HTML 被 art-template 误解析（如 @font-face）。
  */
@@ -66,15 +82,23 @@ export async function renderHtmlImage (html, extra = {}) {
 
 export async function screenshotHtml (e, html, extra = {}) {
   const img = await renderHtmlImage(html, extra)
-  if (img) return e.reply(img)
-  return false
+  if (!img) return false
+  await replyAtImage(e, img, extra.replyPrefix)
+  return true
 }
 
-/** 渲染失败时用纯文本兜底 */
+/** 渲染失败时用纯文本兜底（同样带 @） */
 export async function screenshotHtmlWithFallback (e, html, textFallback, extra = {}) {
-  const ok = await screenshotHtml(e, html, extra)
-  if (!ok && textFallback) await e.reply(textFallback)
-  return ok
+  const img = await renderHtmlImage(html, extra)
+  if (img) {
+    await replyAtImage(e, img, extra.replyPrefix)
+    return true
+  }
+  if (textFallback) {
+    const tail = Array.isArray(textFallback) ? textFallback : [textFallback]
+    await e.reply([atUser(e), ...tail])
+  }
+  return false
 }
 
 export default async function render (tplPath, params, cfg = {}) {
@@ -97,6 +121,10 @@ export default async function render (tplPath, params, cfg = {}) {
   }
 
   const base64 = await puppeteer.screenshot(`${Plugin_Name}/${app}/${tpl}`, data)
-  if (base64) return e.reply(base64)
-  return cfg.retMsgId ? true : true
+  if (base64 && e) {
+    await replyAtImage(e, base64)
+    return true
+  }
+  if (base64) return base64
+  return cfg.retMsgId ? true : false
 }

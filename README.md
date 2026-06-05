@@ -41,8 +41,8 @@ git clone --depth=1 https://github.com/sunflowermm/logier-plugin ./plugins/logie
 
 | 目录 | 用途 | 来源 |
 |------|------|------|
-| `resources/gallery/` | 运势/签到/算卦等用 `wall-*` 风景壁纸（16:9 横图） | 本地壁纸集 |
-| `resources/help/bg.png` | 帮助页全屏 cover 背景 | `wall-a_cartoon_of_a_house_on_a_cliff.png` |
+| `resources/gallery/` | 运势/签到/算卦等随机 `wall-*` 风景壁纸（高清横图） | 本地壁纸集 + Unsplash 风景 |
+| `resources/help/` | 帮助页每次随机 `wall-*` 作 cover 背景 | 与运势共用 gallery |
 | `resources/tarot/cards/` | 78 张塔罗牌面 | 本地化牌图（语义文件名 `a0`–`a21`、`s1`–`s14` 等） |
 | `data/jrys.json` | 今日运势文案 | 参考 [koishi-plugin-jryspro](https://github.com/Twiyin0/koishi-plugin-jryspro) |
 | `data/suangua.json` | 算卦文案 | 插件本地数据 |

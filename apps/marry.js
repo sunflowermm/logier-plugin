@@ -1,7 +1,13 @@
-import { renderHtmlImage } from '../components/renderer.js'
-import { pickRenderBackground, fortuneSplitHtml, escHtml, CANVAS_SPLIT } from '../utils/render-layout.js'
+import { renderHtmlImage, replyAtImage, atUser } from '../components/renderer.js'
+import {
+  pickRenderBackground,
+  fortuneSplitHtml,
+  mediaAvatarOverlay,
+  qqAvatarUrl,
+  escHtml,
+  CANVAS_SPLIT
+} from '../utils/render-layout.js'
 
-/** 仅保留昵称，不拉取/缓存头像 URL，渲染只用本地 gallery */
 function slimMember (member) {
   return {
     user_id: String(member.user_id),
@@ -39,11 +45,7 @@ export class example extends plugin {
     }
 
     if (marrydata?.lastmarryDate === date_time) {
-      await renderMarry(
-        e,
-        `今天已经迎娶【${marrydata.lastmarry.nickname}】了哦~`,
-        marrydata.lastmarry.nickname
-      )
+      await renderMarry(e, `今天已经迎娶【${marrydata.lastmarry.nickname}】了哦~`, marrydata.lastmarry)
       return true
     }
 
@@ -51,7 +53,7 @@ export class example extends plugin {
       lastmarryDate: date_time,
       lastmarry: randomWife
     }))
-    await renderMarry(e, `${randomWife.nickname} 成为了你的新老婆哦~`, randomWife.nickname)
+    await renderMarry(e, `${randomWife.nickname} 成为了你的新老婆哦~`, randomWife)
     return true
   }
 }
@@ -73,8 +75,8 @@ async function getRandomWife (e) {
   return [filtered[Math.floor(Math.random() * filtered.length)]]
 }
 
-async function renderMarry (e, replyMessage, wifeName) {
-  const filePath = pickRenderBackground('fortune')
+async function renderMarry (e, replyMessage, wife) {
+  const filePath = pickRenderBackground()
   const poems = [
     '百年推甲子，福地在春申',
     '红毹拥出态娇妍，璧合珠联看并肩',
@@ -82,19 +84,21 @@ async function renderMarry (e, replyMessage, wifeName) {
     '琴韵谱成同梦语，灯花笑对含羞人'
   ]
   const content = poems[Math.floor(Math.random() * poems.length)]
+  const avatarUrl = qqAvatarUrl(wife.user_id)
 
   const html = fortuneSplitHtml({
     filePath,
     textRatio: 0.36,
     footerText: '',
-    titleLines: `<h2>今日老婆</h2><p style="font-size:1.25rem;font-weight:bold">${escHtml(wifeName)}</p>`,
+    mediaOverlay: mediaAvatarOverlay(avatarUrl),
+    titleLines: `<h2>今日老婆</h2><p class="wife-name">${escHtml(wife.nickname)}</p>`,
     bodyHtml: `<div class="body"><p>${escHtml(content)}</p></div>`
   })
 
-  const img = await renderHtmlImage(html, CANVAS_SPLIT)
+  const img = await renderHtmlImage(html, { ...CANVAS_SPLIT, imageWaitTimeout: 5000 })
   if (img) {
-    await e.reply([replyMessage, img], true)
+    await replyAtImage(e, img, replyMessage)
   } else {
-    await e.reply(`${replyMessage}\n${wifeName}\n${content}`)
+    await e.reply([atUser(e), replyMessage, `${wife.nickname}\n${content}`])
   }
 }

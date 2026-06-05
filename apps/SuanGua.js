@@ -1,6 +1,6 @@
 import { screenshotHtmlWithFallback } from '../components/renderer.js'
 import { readAndParseJSON } from '../utils/getdate.js'
-import { pickRenderBackground, guaSplitHtml, CANVAS_SPLIT } from '../utils/render-layout.js'
+import { pickRenderBackground, fortuneSplitHtml, guaBodyHtml, escHtml, CANVAS_SPLIT } from '../utils/render-layout.js'
 
 const REDIS_KEY = (uid) => `Yunzai:logier-plugin:${uid}_suangua`
 
@@ -38,7 +38,7 @@ export class TextMsg extends plugin {
     }
 
     await e.reply(replymessage, true, { recallMsg: 10 })
-    await renderFortune(e, data)
+    await renderGua(e, data)
     return true
   }
 
@@ -64,24 +64,31 @@ export class TextMsg extends plugin {
     }
 
     await e.reply(replymessage, true, { recallMsg: 10 })
-    await renderFortune(e, data)
+    await renderGua(e, data)
     return true
   }
 }
 
-async function renderFortune (e, data) {
-  const filePath = pickRenderBackground('wide')
+async function renderGua (e, data) {
+  const filePath = pickRenderBackground()
   const fortune = data.fortune
   const nickname = e.nickname || e.sender?.card || '旅人'
-  const topic = e.msg.replace(/^#?(算一卦|算卦)/, '').trim()
-  const intro = `${nickname}心中所念${topic ? `「${topic}」` : ''}，卦象如下：`
+  const topic = e.msg.replace(/^#?(算一卦|算卦|悔卦|逆天改命)/, '').trim()
+  const topicLine = topic ? `「${topic}」` : ''
 
-  const html = guaSplitHtml({
+  const html = fortuneSplitHtml({
     filePath,
-    intro,
-    paragraphs: [fortune.guayao, fortune.guachi, `${fortune.name}\n${fortune.Poetry}`, fortune.description]
+    bodyMode: 'gua',
+    titleLines: `<p>${escHtml(nickname)}心中所念${escHtml(topicLine)}</p><p>卦象如下</p><h2>${escHtml(fortune.name)}</h2><p>${escHtml(fortune.guachi)}</p>`,
+    bodyHtml: guaBodyHtml(fortune)
   })
 
-  const fallback = [intro, fortune.guachi, fortune.name, fortune.Poetry, fortune.description].join('\n')
+  const fallback = [
+    `${nickname}心中所念${topicLine}，卦象如下：`,
+    fortune.guachi,
+    fortune.name,
+    fortune.Poetry,
+    fortune.description
+  ].join('\n')
   await screenshotHtmlWithFallback(e, html, fallback, CANVAS_SPLIT)
 }

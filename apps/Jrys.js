@@ -70,7 +70,7 @@ export class TextMsg extends plugin {
 }
 
 async function renderFortune (e, data) {
-  const filePath = pickRenderBackground('fortune')
+  const filePath = pickRenderBackground()
   const nickname = e.nickname || e.sender?.card || '旅人'
   const fortune = data.fortune
   const dayCn = await numToChinese(new Date().getDate())
@@ -81,9 +81,6 @@ async function renderFortune (e, data) {
     bodyHtml: `<div class="body"><p>${escHtml(fortune.signText)}</p><p>${escHtml(fortune.unsignText)}</p></div>`
   })
 
-  const fallback = [
-    segment.at(e.user_id),
-    `${dayCn}号运势：${fortune.fortuneSummary}\n${fortune.luckyStar}\n${fortune.signText}\n${fortune.unsignText}`
-  ]
+  const fallback = `${dayCn}号运势：${fortune.fortuneSummary}\n${fortune.luckyStar}\n${fortune.signText}\n${fortune.unsignText}`
   await screenshotHtmlWithFallback(e, html, fallback, CANVAS_SPLIT)
 }
