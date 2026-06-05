@@ -2,83 +2,99 @@ body.elem-default,
 body.elem-hydro {
   transform: scale(1) !important;
   transform-origin: top left;
-  width: 1137px !important;
+  width: 1280px !important;
   min-height: 100%;
-  background-color: #1e1a28;
-  background-image: url("./bg.png");
+  background-color: #0f172a;
+  background-image:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.42) 0%, rgba(15, 23, 42, 0.58) 45%, rgba(15, 23, 42, 0.82) 100%),
+    url("./bg.png");
   background-repeat: no-repeat;
-  background-position: top left;
-  background-size: 1137px 627px;
+  background-position: center top;
+  background-size: cover;
 }
 
 body.elem-default .container,
 body.elem-hydro .container {
-  width: 1137px !important;
-  max-width: 1137px;
-  padding: 0 28px 40px 248px;
+  width: 1280px !important;
+  max-width: 1280px;
+  padding: 0 36px 48px;
   background: none !important;
   box-sizing: border-box;
 }
 
+.info-box {
+  margin: 0 -36px;
+  padding: 40px 36px 28px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.35) 0%, transparent 100%);
+}
+
 .head-box {
-  margin: 32px 0 12px;
+  margin: 0;
   padding: 0;
-  color: #2a2438;
-}
 
-.head-box .title {
-  font-size: 42px;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
-}
+  .title {
+    font-size: 46px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #f8fafc;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+  }
 
-.head-box .label {
-  font-size: 16px;
-  margin-top: 6px;
+  .label {
+    font-size: 17px;
+    margin-top: 10px;
+    color: rgba(248, 250, 252, 0.88);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+  }
 }
 
 .cont-box {
-  border-radius: 12px;
-  margin-top: 14px;
-  margin-bottom: 14px;
+  border-radius: 14px;
+  margin-top: 16px;
+  margin-bottom: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(30, 26, 40, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(10px);
 }
 
 .help-group {
-  font-size: 17px;
-  font-weight: bold;
-  padding: 12px 14px 8px 16px;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 14px 18px 10px 20px;
+  border-left: 4px solid #5eead4;
+  color: #0f172a;
 }
 
 .help-table {
   text-align: center;
   border-collapse: collapse;
   margin: 0;
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 0 12px 12px;
   display: table;
   overflow: hidden;
   width: 100%;
-  color: #2a2438;
-}
+  color: #1e293b;
 
-.help-table .tr {
-  display: table-row;
-}
+  .tr {
+    display: table-row;
+  }
 
-.help-table .td,
-.help-table .th {
-  font-size: 14px;
-  display: table-cell;
-  box-shadow: 0 0 1px 0 rgba(120, 110, 140, 0.25) inset;
-  padding: 11px 0 11px 50px;
-  line-height: 24px;
-  position: relative;
-  text-align: left;
-}
+  .td,
+  .th {
+    font-size: 14px;
+    display: table-cell;
+    box-shadow: 0 0 1px 0 rgba(100, 116, 139, 0.2) inset;
+    padding: 12px 8px 12px 52px;
+    line-height: 24px;
+    position: relative;
+    text-align: left;
+    vertical-align: middle;
+  }
 
-.help-table .tr:last-child .td {
-  padding-bottom: 11px;
+  .tr:last-child .td {
+    padding-bottom: 12px;
+  }
 }
 
 .help-icon {
@@ -88,16 +104,18 @@ body.elem-hydro .container {
   position: absolute;
   background: url("icon.png") 0 0 no-repeat;
   background-size: 500px auto;
-  border-radius: 5px;
-  left: 6px;
-  top: 11px;
+  border-radius: 8px;
+  left: 8px;
+  top: 12px;
   transform: scale(0.85);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
 }
 
 .help-title {
   display: block;
-  color: #3d3550;
+  color: #1e293b;
   font-size: 16px;
+  font-weight: 600;
   line-height: 24px;
 }
 
@@ -105,10 +123,13 @@ body.elem-hydro .container {
   display: block;
   font-size: 13px;
   line-height: 18px;
-  color: #4a4258;
+  color: #475569;
+  margin-top: 2px;
 }
 
 .copyright {
-  color: #d8c8e8;
-  margin-top: 8px;
+  color: rgba(248, 250, 252, 0.72);
+  margin-top: 12px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  font-size: 13px;
 }

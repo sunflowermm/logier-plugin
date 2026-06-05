@@ -1,6 +1,6 @@
 import { screenshotHtmlWithFallback } from '../components/renderer.js'
 import { getTimeOfDay } from '../utils/getdate.js'
-import { pickRenderBackground, signCardHtml } from '../utils/render-layout.js'
+import { pickRenderBackground, signCardHtml, escHtml, CANVAS_SIGN } from '../utils/render-layout.js'
 
 const SIGN_QUOTES = [
   '生活明朗，万物可爱。',
@@ -55,14 +55,14 @@ export class TextMsg extends plugin {
 
     const html = signCardHtml({
       filePath,
-      header: `<p><span>${getTimeOfDay()}好！</span>${nickname}</p><p>${issign}</p>`,
+      header: `<p><span>${escHtml(getTimeOfDay())}好！</span>${escHtml(nickname)}</p><p>${escHtml(issign)}</p>`,
       date: datatime,
       quote: content,
-      footer: `当前好感度：<span class="highlight">${data.favor}</span>，群排名：<span class="highlight">第${position}位</span>`
+      footer: `当前好感度：<span class="highlight">${escHtml(data.favor)}</span>，群排名：<span class="highlight">第${escHtml(position)}位</span>`
     })
 
     const fallback = `${nickname} ${issign}\n好感度 ${data.favor}，群排名第 ${position} 位\n「${content}」`
-    await screenshotHtmlWithFallback(e, html, fallback)
+    await screenshotHtmlWithFallback(e, html, fallback, { ...CANVAS_SIGN, fullPage: true })
     return true
   }
 }

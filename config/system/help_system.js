@@ -1,7 +1,7 @@
 export const helpCfg = {
   title: '鸢尾花帮助',
   subTitle: 'XRK-Yunzai & 鸢尾花插件',
-  colWidth: 277,
+  colWidth: 403,
   colCount: 3,
   bgBlur: true
 }

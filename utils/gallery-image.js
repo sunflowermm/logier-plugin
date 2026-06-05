@@ -6,10 +6,10 @@ import { pluginRoot } from '../model/path.js'
 
 const GALLERY_DIR = path.join(pluginRoot, 'resources/gallery')
 const IMAGE_EXT = new Set(['.jpg', '.png', '.gif', '.jpeg', '.webp'])
-const FALLBACK = path.join(GALLERY_DIR, 'bjt-0.png')
+const FALLBACK = path.join(GALLERY_DIR, 'wall-a_cartoon_of_a_house_on_a_cliff.png')
 
-/** 超级英雄/梗图/低高度超宽条带/竖图等不适合运势配图 */
-const EXCLUDE_NAME = /^(92095127|114388636|Vmake|wall-(Spider-man|Antman|Black-panther|Groot|Kratos|Luffy|Jurassic|dino|Trex|4k-keyboard|abstract|abandoned|Bix57|Z5hj|4k-ai-mountain|Computerized|TokyoSimplistic))/i
+/** 超级英雄/梗图/低高度超宽条带/竖图/纯色小块等不适合配图 */
+const EXCLUDE_NAME = /^(92095127|114388636|Vmake|wall-(Spider-man|Antman|Black-panther|Groot|Kratos|Luffy|Jurassic|dino|Trex|4k-keyboard|abstract|abandoned|Bix57|Z5hj|4k-ai-mountain|Computerized|TokyoSimplistic|3squares))/i
 
 /** 读取本地图片宽高（无需额外依赖） */
 export function readImageSize (filePath) {
@@ -88,11 +88,11 @@ function pickFrom (pool) {
 }
 
 /**
- * 按画幅挑选本地 gallery 图
+ * 按画幅挑选本地 gallery 图（优先 wall- 风景壁纸）
  * @param {{ minRatio?: number, maxRatio?: number, minWidth?: number, minHeight?: number, preferPrefix?: string[] }} opts
  */
 export function pickGalleryFile (opts = {}) {
-  const { preferPrefix = [], ...filters } = opts
+  const { preferPrefix = ['wall-'], ...filters } = opts
   const all = listGalleryFiles()
 
   if (preferPrefix.length) {
@@ -102,7 +102,7 @@ export function pickGalleryFile (opts = {}) {
   }
 
   const candidates = all.filter(f => matchFilters(f, filters))
-  return pickFrom(candidates) || pickFrom(all.filter(f => path.basename(f).startsWith('bjt-'))) || FALLBACK
+  return pickFrom(candidates) || pickFrom(all.filter(f => path.basename(f).startsWith('wall-'))) || FALLBACK
 }
 
 export function toFileUrl (filePath) {
@@ -126,7 +126,6 @@ export function layoutForImage (filePath, boxW, boxH) {
     w = boxW
     h = Math.ceil(boxW / ratio)
   }
-  const posX = path.basename(filePath).startsWith('bjt-') ? '75%' : '50%'
   return {
     url: toFileUrl(filePath),
     width: size?.width,
@@ -134,6 +133,6 @@ export function layoutForImage (filePath, boxW, boxH) {
     ratio,
     boxW,
     boxH,
-    imgCss: `width:${w}px;height:${h}px;max-width:none;object-fit:cover;object-position:${posX} center;display:block;margin:0 auto;`
+    imgCss: `width:${w}px;height:${h}px;max-width:none;object-fit:cover;object-position:50% center;display:block;margin:0 auto;`
   }
 }

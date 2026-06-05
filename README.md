@@ -41,8 +41,8 @@ git clone --depth=1 https://github.com/sunflowermm/logier-plugin ./plugins/logie
 
 | 目录 | 用途 | 来源 |
 |------|------|------|
-| `resources/gallery/` | 运势/签到等用 `bjt-*` 模板（1137×627）；算卦用 16:9 风景图 | [BJT-Template](https://github.com/SmallK111407/BJT-Template)（MIT） |
-| `resources/help/bg.png` | 帮助页背景（BJT 模板，左侧留白适合叠字） | 本地 `bjt-12.png` |
+| `resources/gallery/` | 运势/签到/算卦等用 `wall-*` 风景壁纸（16:9 横图） | 本地壁纸集 |
+| `resources/help/bg.png` | 帮助页全屏 cover 背景 | `wall-a_cartoon_of_a_house_on_a_cliff.png` |
 | `resources/tarot/cards/` | 78 张塔罗牌面 | 本地化牌图（语义文件名 `a0`–`a21`、`s1`–`s14` 等） |
 | `data/jrys.json` | 今日运势文案 | 参考 [koishi-plugin-jryspro](https://github.com/Twiyin0/koishi-plugin-jryspro) |
 | `data/suangua.json` | 算卦文案 | 插件本地数据 |
@@ -53,7 +53,6 @@ git clone --depth=1 https://github.com/sunflowermm/logier-plugin ./plugins/logie
 
 - 原作者：[@logier](https://gitee.com/logier)（上游已停更，本分支独立维护）
 - [今日运势文案参考](https://github.com/twiyin0/koishi-plugin-jryspro)
-- [BJT-Template 背景图](https://github.com/SmallK111407/BJT-Template)
 - [向日葵插件](https://github.com/sunflowermm/XRK-plugin)
 
 ## 许可

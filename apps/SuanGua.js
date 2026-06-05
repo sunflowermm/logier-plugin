@@ -1,6 +1,6 @@
 import { screenshotHtmlWithFallback } from '../components/renderer.js'
 import { readAndParseJSON } from '../utils/getdate.js'
-import { pickRenderBackground, guaSplitHtml } from '../utils/render-layout.js'
+import { pickRenderBackground, guaSplitHtml, CANVAS_SPLIT } from '../utils/render-layout.js'
 
 const REDIS_KEY = (uid) => `Yunzai:logier-plugin:${uid}_suangua`
 
@@ -83,5 +83,5 @@ async function renderFortune (e, data) {
   })
 
   const fallback = [intro, fortune.guachi, fortune.name, fortune.Poetry, fortune.description].join('\n')
-  await screenshotHtmlWithFallback(e, html, fallback)
+  await screenshotHtmlWithFallback(e, html, fallback, CANVAS_SPLIT)
 }

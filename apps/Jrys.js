@@ -1,6 +1,6 @@
 import { screenshotHtmlWithFallback } from '../components/renderer.js'
 import { readAndParseJSON, numToChinese } from '../utils/getdate.js'
-import { pickRenderBackground, fortuneSplitHtml } from '../utils/render-layout.js'
+import { pickRenderBackground, fortuneSplitHtml, escHtml, CANVAS_SPLIT } from '../utils/render-layout.js'
 
 const REDIS_KEY = (uid) => `Yunzai:logier-plugin:${uid}_jrys`
 
@@ -77,13 +77,13 @@ async function renderFortune (e, data) {
 
   const html = fortuneSplitHtml({
     filePath,
-    titleLines: `<p>${nickname}的${dayCn}号运势为</p><h2>${fortune.fortuneSummary}</h2><p>${fortune.luckyStar}</p>`,
-    bodyHtml: `<div class="body"><p>${fortune.signText}</p><p>${fortune.unsignText}</p></div>`
+    titleLines: `<p>${escHtml(nickname)}的${escHtml(dayCn)}号运势为</p><h2>${escHtml(fortune.fortuneSummary)}</h2><p>${escHtml(fortune.luckyStar)}</p>`,
+    bodyHtml: `<div class="body"><p>${escHtml(fortune.signText)}</p><p>${escHtml(fortune.unsignText)}</p></div>`
   })
 
   const fallback = [
     segment.at(e.user_id),
     `${dayCn}号运势：${fortune.fortuneSummary}\n${fortune.luckyStar}\n${fortune.signText}\n${fortune.unsignText}`
   ]
-  await screenshotHtmlWithFallback(e, html, fallback)
+  await screenshotHtmlWithFallback(e, html, fallback, CANVAS_SPLIT)
 }

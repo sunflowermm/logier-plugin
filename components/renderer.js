@@ -1,9 +1,9 @@
 import { Data, Version, Plugin_Name } from './index.js'
 import puppeteer from '../../../lib/puppeteer/puppeteer.js'
 import fs from 'fs'
-import path from 'node:path'
 
 const _path = process.cwd()
+const INLINE_TPL = `./plugins/${Plugin_Name}/resources/common/inline.html`
 
 /** 插件内 HTML / 模板截图默认参数（PNG + 2x DPR） */
 export const PLUGIN_RENDER_OPTS = {
@@ -46,24 +46,22 @@ function buildRenderData (params, renderOpts = {}, scale = 1) {
   }
 }
 
-/** 将内联 HTML 写入临时文件并截图，返回 segment 或 false */
+/**
+ * 内联 HTML 截图：经 inline.html（{{@html}}）注入，避免整页 HTML 被 art-template 误解析（如 @font-face）。
+ */
 export async function renderHtmlImage (html, extra = {}) {
-  const dir = path.join(_path, 'data/html', Plugin_Name, '_inline')
-  fs.mkdirSync(dir, { recursive: true })
-  const file = path.join(dir, `${Date.now()}_${Math.random().toString(36).slice(2)}.html`)
-  fs.writeFileSync(file, html, 'utf8')
-  try {
-    const data = {
-      tplFile: file,
-      saveId: '_inline',
-      fullPage: extra.fullPage ?? true,
-      ...PLUGIN_RENDER_OPTS,
-      ...extra
-    }
-    return puppeteer.screenshot(`${Plugin_Name}/_inline/_inline`, data)
-  } finally {
-    try { fs.unlinkSync(file) } catch { /* ignore */ }
+  const saveId = `_inline_${Date.now()}_${Math.random().toString(36).slice(2)}`
+  const data = {
+    tplFile: INLINE_TPL,
+    html,
+    saveId,
+    fullPage: extra.fullPage ?? true,
+    width: extra.width ?? 1280,
+    height: extra.height ?? 900,
+    ...PLUGIN_RENDER_OPTS,
+    ...extra
   }
+  return puppeteer.screenshot(`${Plugin_Name}/inline/render`, data)
 }
 
 export async function screenshotHtml (e, html, extra = {}) {

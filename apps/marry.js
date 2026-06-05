@@ -1,5 +1,5 @@
 import { renderHtmlImage } from '../components/renderer.js'
-import { pickRenderBackground, fortuneSplitHtml } from '../utils/render-layout.js'
+import { pickRenderBackground, fortuneSplitHtml, escHtml, CANVAS_SPLIT } from '../utils/render-layout.js'
 
 /** 仅保留昵称，不拉取/缓存头像 URL，渲染只用本地 gallery */
 function slimMember (member) {
@@ -87,11 +87,11 @@ async function renderMarry (e, replyMessage, wifeName) {
     filePath,
     textRatio: 0.36,
     footerText: '',
-    titleLines: `<h2>今日老婆</h2><p style="font-size:1.25rem;font-weight:bold">${wifeName}</p>`,
-    bodyHtml: `<div class="body"><p>${content}</p></div>`
+    titleLines: `<h2>今日老婆</h2><p style="font-size:1.25rem;font-weight:bold">${escHtml(wifeName)}</p>`,
+    bodyHtml: `<div class="body"><p>${escHtml(content)}</p></div>`
   })
 
-  const img = await renderHtmlImage(html)
+  const img = await renderHtmlImage(html, CANVAS_SPLIT)
   if (img) {
     await e.reply([replyMessage, img], true)
   } else {
