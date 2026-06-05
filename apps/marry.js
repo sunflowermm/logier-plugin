@@ -7,7 +7,7 @@ export class example extends plugin {
       name: '[鸢尾花插件]今日老婆',
       dsc: '今日老婆',
       event: 'message',
-      priority: 5000,
+      priority: -5000,
       rule: [
         { reg: '^(#|/)?(今日老婆|marry)$', fnc: '今日老婆' }
       ]

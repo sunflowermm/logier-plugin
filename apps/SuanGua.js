@@ -9,7 +9,7 @@ export class TextMsg extends plugin {
       name: '[鸢尾花插件]算一卦',
       dsc: '算一卦',
       event: 'message',
-      priority: 5000,
+      priority: -5000,
       rule: [
         { reg: '^#?(算一卦|算卦).*$', fnc: '算一卦' },
         { reg: '^#?(悔卦|逆天改命).*$', fnc: '悔卦' }

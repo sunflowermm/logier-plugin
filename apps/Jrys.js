@@ -9,7 +9,7 @@ export class TextMsg extends plugin {
       name: '[鸢尾花插件]今日运势',
       dsc: '今日运势',
       event: 'message',
-      priority: 5000,
+      priority: -5000,
       rule: [
         { reg: '^#?(今日运势|运势)$', fnc: '今日运势' },
         { reg: '^#?(悔签|重新抽取运势)$', fnc: '悔签' }
