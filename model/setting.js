@@ -13,9 +13,6 @@ class Setting {
     this.configPath = `${_path}/plugins/logier-plugin/config/`
     this.config = {}
 
-    this.dataPath = `${_path}/plugins/logier-plugin/data/`
-    this.data = {}
-
     /** 监听文件 */
     this.watcher = { config: {}, defSet: {} }
   }
@@ -36,33 +33,6 @@ class Setting {
   analysis(config) {
     for (let key of Object.keys(config)){
       this.setConfig(key, config[key])
-    }
-  }
-
-  // 获取对应模块数据文件
-  getData (path, filename) {
-    path = `${this.dataPath}${path}/`
-    try {
-      if (!fs.existsSync(`${path}${filename}.yaml`)){ return false}
-      return YAML.parse(fs.readFileSync(`${path}${filename}.yaml`, 'utf8'))
-    } catch (error) {
-      logger.error(`[${filename}] 读取失败 ${error}`)
-      return false
-    }
-  }
-
-  // 写入对应模块数据文件
-  setData (path, filename, data) {
-    path = `${this.dataPath}${path}/`
-    try {
-      if (!fs.existsSync(path)){
-        // 递归创建目录
-        fs.mkdirSync(path, { recursive: true });
-      }
-      fs.writeFileSync(`${path}${filename}.yaml`, YAML.stringify(data),'utf8')
-    } catch (error) {
-      logger.error(`[${filename}] 写入失败 ${error}`)
-      return false
     }
   }
 

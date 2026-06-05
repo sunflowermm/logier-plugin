@@ -9,9 +9,9 @@ export function supportGuoba () {
     pluginInfo: {
       name: '鸢尾花插件',
       title: '鸢尾花插件(logier-plugin)',
-      author: '@logier',
-      authorLink: 'https://gitee.com/logier',
-      link: 'https://gitee.com/logier/logier-plugins',
+      author: '@sunflower / XRK-Yunzai',
+      authorLink: 'https://github.com/sunflowermm/logier-plugin',
+      link: 'https://github.com/sunflowermm/logier-plugin',
       isV3: true,
       isV2: false,
       description: '运势系列与塔罗占卜（本地渲染）',

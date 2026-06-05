@@ -2,7 +2,6 @@ import path from 'node:path'
 import fs from 'node:fs'
 import { pathToFileURL } from 'node:url'
 import { readAndParseJSON } from '../utils/getdate.js'
-import { brandLinkToRemoteName } from '../utils/tarot-images.js'
 import { pluginResources } from './path.js'
 const tarotData = await readAndParseJSON('../data/tarot.json')
 const CARD_DIR = path.join(pluginResources, 'tarot', 'cards')
@@ -22,10 +21,9 @@ const formations = tarotData.formations
 const cards = tarotData.cards
 
 function cardFile (cardKey) {
-  const card = cards[cardKey]
-  const remote = brandLinkToRemoteName(card?.Brand_Link)
-  if (remote) {
-    const file = path.join(CARD_DIR, remote)
+  const image = cards[cardKey]?.image
+  if (image) {
+    const file = path.join(CARD_DIR, image)
     if (fs.existsSync(file)) return file
   }
   return path.join(CARD_DIR, 'a0.webp')

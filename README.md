@@ -1,26 +1,20 @@
 # 鸢尾花插件 (logier-plugin)
 
 <div align="center">
-  <a href="https://logier.gitee.io/">
-    <img src="./resources/img/logo.png" alt="Logo" height="120">
-  </a>
+  <img src="./resources/img/logo.png" alt="Logo" height="120">
   <br><br>
-  <a href="https://qm.qq.com/cgi-bin/qm/qr?k=Tx0KJBxwamQ1slXC4d3ZVhSigQ9MiCmJ&jump_from=webapi&authKey=BJVVNjuciQCnetGahh3pNOirLULs1XA7fQMn/LlPWAWk5GDdr2WWB/zHim1k1OoY">QQ 群</a>
-  ·
-  <a href="https://logier.gitee.io/">原作者博客</a>
-  ·
-  <a href="https://gitee.com/logier/logier-plugins">Gitee</a>
-  ·
-  <a href="https://github.com/logier/logier-plugins">GitHub</a>
+  <strong>向日葵 / XRK-Yunzai 维护版</strong>
 </div>
+
+版本：1.0.0-sunflower
 
 ## 关于本分支
 
-本仓库为 **向日葵 / XRK-Yunzai 维护版本**，在原作者 [logier](https://gitee.com/logier) 的鸢尾花插件基础上精简改造：
+本仓库为 **向日葵 / XRK-Yunzai 维护版本**。在原作者 logier 的鸢尾花插件基础上精简改造，**所有功能资源均为本地文件**，运行时不再请求外部图床或诗词 API。
 
-- 移除了大部分依赖外部 API / GPT 的功能（天气、番剧、表情包、戳一戳、自定义 API 等）
-- 运势、算卦、签到、今日老婆等改为 **本地 gallery 背景 + Puppeteer 渲染**，渲染失败时有文本兜底
-- **塔罗牌模块已重做**：78 张牌图本地化，牌义与图片按 `Brand_Link` 一一对应，支持单牌、牌阵、查牌、每日塔罗等
+- 移除了依赖外部 API / GPT 的功能（天气、番剧、表情包、戳一戳等）
+- 运势、算卦、签到、今日老婆等使用 **本地 gallery 背景 + Puppeteer 渲染**，失败时有文本兜底
+- **塔罗模块**：78 张牌图与牌义数据均在 `resources/tarot/` 与 `data/tarot.json`，支持单牌、牌阵、查牌、每日塔罗
 
 发送 `#鸢尾花帮助` 可查看完整指令列表。
 
@@ -30,14 +24,6 @@
 
 ```bash
 git clone --depth=1 https://github.com/sunflowermm/logier-plugin ./plugins/logier-plugin/
-```
-
-或使用原作者仓库（功能与上游可能不同）：
-
-```bash
-git clone --depth=1 https://gitee.com/logier/logier-plugins.git ./plugins/logier-plugin/
-# 或
-git clone --depth=1 https://github.com/logier/logier-plugins.git ./plugins/logier-plugin/
 ```
 
 ## 保留功能概览
@@ -51,15 +37,22 @@ git clone --depth=1 https://github.com/logier/logier-plugins.git ./plugins/logie
 
 塔罗默认牌阵可在锅巴中配置；亦支持 `#牌阵列表` 查看全部牌阵。
 
+## 本地资源说明
+
+| 目录 | 用途 | 来源 |
+|------|------|------|
+| `resources/gallery/` | 运势/算卦/签到等随机背景（27+ 张） | 插件自带 + [BJT-Template](https://github.com/SmallK111407/BJT-Template)（MIT） |
+| `resources/tarot/cards/` | 78 张塔罗牌面 | 本地化牌图（语义文件名 `a0`–`a21`、`s1`–`s14` 等） |
+| `data/jrys.json` | 今日运势文案 | 参考 [koishi-plugin-jryspro](https://github.com/Twiyin0/koishi-plugin-jryspro) |
+| `data/suangua.json` | 算卦文案 | 插件本地数据 |
+| `data/tarot.json` | 牌义与牌阵 | 插件本地数据（含 `image` 字段指向本地牌图） |
+| `resources/common/` | 帮助页字体、主题、布局 | 插件自带 |
+
 ## 原作者与鸣谢
 
-- 原作者：[@logier](https://gitee.com/logier) · [个人博客](https://logier.gitee.io/) · [QQ 群](https://qm.qq.com/cgi-bin/qm/qr?k=Tx0KJBxwamQ1slXC4d3ZVhSigQ9MiCmJ&jump_from=webapi&authKey=BJVVNjuciQCnetGahh3pNOirLULs1XA7fQMn/LlPWAWk5GDdr2WWB/zHim1k1OoY) · [爱发电](https://afdian.net/a/logier)
-
-参考与致谢：
-
-- [今日运势源仓库](https://github.com/twiyin0/koishi-plugin-jryspro)
-- [云崽插件基础示例](https://gitee.com/Zyy955/Miao-Yunzai-plugin)
-- [云崽市场](https://gitee.com/yhArcadia/Yunzai-Bot-plugins-indexn)
+- 原作者：[@logier](https://gitee.com/logier)（上游已停更，本分支独立维护）
+- [今日运势文案参考](https://github.com/twiyin0/koishi-plugin-jryspro)
+- [BJT-Template 背景图](https://github.com/SmallK111407/BJT-Template)
 - [向日葵插件](https://github.com/sunflowermm/XRK-plugin)
 
 ## 许可
