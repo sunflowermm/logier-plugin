@@ -14,8 +14,8 @@ const Theme = {
     body{
       width:${width}px;
       min-height:100%;
-      background:url(${resPath}bg.png) center top / cover no-repeat fixed;
-      background-color:#2b2438;
+      background:url(${resPath}bg.png) center top / cover no-repeat;
+      background-color:#d8c8e8;
     }
     .container{
       width:${width}px;

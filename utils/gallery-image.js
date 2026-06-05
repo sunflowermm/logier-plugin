@@ -6,7 +6,10 @@ import { pluginRoot } from '../model/path.js'
 
 const GALLERY_DIR = path.join(pluginRoot, 'resources/gallery')
 const IMAGE_EXT = new Set(['.jpg', '.png', '.gif', '.jpeg', '.webp'])
-const FALLBACK = path.join(GALLERY_DIR, '92095127.webp')
+const FALLBACK = path.join(GALLERY_DIR, 'bjt-0.png')
+
+/** 超级英雄/梗图/低高度超宽条带/竖图等不适合运势配图 */
+const EXCLUDE_NAME = /^(92095127|114388636|Vmake|wall-(Spider-man|Antman|Black-panther|Groot|Kratos|Luffy|Jurassic|dino|Trex|4k-keyboard|abstract|abandoned|Bix57|Z5hj|4k-ai-mountain|Computerized|TokyoSimplistic))/i
 
 /** 读取本地图片宽高（无需额外依赖） */
 export function readImageSize (filePath) {
@@ -57,24 +60,49 @@ function listGalleryFiles (dir = GALLERY_DIR, out = []) {
   return out
 }
 
+function matchFilters (file, opts = {}) {
+  const name = path.basename(file)
+  if (EXCLUDE_NAME.test(name)) return false
+
+  const size = readImageSize(file)
+  if (!size?.width || !size?.height) return false
+
+  const ratio = size.width / size.height
+  const {
+    minRatio = 1.2,
+    maxRatio = 8,
+    minWidth = 0,
+    minHeight = 0,
+    maxHeight = Infinity
+  } = opts
+
+  if (ratio < minRatio || ratio > maxRatio) return false
+  if (size.width < minWidth) return false
+  if (size.height < minHeight || size.height > maxHeight) return false
+  return true
+}
+
+function pickFrom (pool) {
+  if (!pool.length) return null
+  return pool[Math.floor(Math.random() * pool.length)]
+}
+
 /**
- * 按画幅挑选本地 gallery 图，避免竖图被拉扁、横图被裁切异常
- * @param {{ minRatio?: number, maxRatio?: number, minWidth?: number }} opts
+ * 按画幅挑选本地 gallery 图
+ * @param {{ minRatio?: number, maxRatio?: number, minWidth?: number, minHeight?: number, preferPrefix?: string[] }} opts
  */
 export function pickGalleryFile (opts = {}) {
-  const { minRatio = 1.2, maxRatio = 8, minWidth = 1200 } = opts
-  const candidates = []
-  for (const file of listGalleryFiles()) {
-    const size = readImageSize(file)
-    if (!size?.width || !size?.height) continue
-    const ratio = size.width / size.height
-    if (ratio >= minRatio && ratio <= maxRatio && size.width >= minWidth) {
-      candidates.push(file)
-    }
+  const { preferPrefix = [], ...filters } = opts
+  const all = listGalleryFiles()
+
+  if (preferPrefix.length) {
+    const preferred = all.filter(f => preferPrefix.some(p => path.basename(f).startsWith(p)))
+    const hit = pickFrom(preferred.filter(f => matchFilters(f, filters)))
+    if (hit) return hit
   }
-  const pool = candidates.length ? candidates : listGalleryFiles()
-  if (!pool.length) return FALLBACK
-  return pool[Math.floor(Math.random() * pool.length)]
+
+  const candidates = all.filter(f => matchFilters(f, filters))
+  return pickFrom(candidates) || pickFrom(all.filter(f => path.basename(f).startsWith('bjt-'))) || FALLBACK
 }
 
 export function toFileUrl (filePath) {
@@ -98,6 +126,7 @@ export function layoutForImage (filePath, boxW, boxH) {
     w = boxW
     h = Math.ceil(boxW / ratio)
   }
+  const posX = path.basename(filePath).startsWith('bjt-') ? '75%' : '50%'
   return {
     url: toFileUrl(filePath),
     width: size?.width,
@@ -105,6 +134,6 @@ export function layoutForImage (filePath, boxW, boxH) {
     ratio,
     boxW,
     boxH,
-    imgCss: `width:${w}px;height:${h}px;max-width:none;object-fit:cover;object-position:center;display:block;margin:0 auto;`
+    imgCss: `width:${w}px;height:${h}px;max-width:none;object-fit:cover;object-position:${posX} center;display:block;margin:0 auto;`
   }
 }

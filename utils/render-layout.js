@@ -3,14 +3,17 @@ import { layoutForImage, pickGalleryFile, toFileUrl } from './gallery-image.js'
 
 const FONT_CSS = `@font-face{font-family:'HYWH';src:url('${pluginAssetUrl('resources/common/font/HYWH-65W.woff')}') format('woff');}`
 
+/** BJT 模板 1137×627；风景图优先 16:9 且高度≥1080 */
+const BJT = { preferPrefix: ['bjt-'], minRatio: 1.5, maxRatio: 2.2, minWidth: 1000, minHeight: 600 }
+const SCENIC = { minRatio: 1.5, maxRatio: 2.5, minWidth: 1600, minHeight: 1080 }
+
 export function pickRenderBackground (purpose = 'default') {
   const presets = {
-    /** 侧栏竖裁：优先超宽横图，cover 后不变形 */
-    fortune: { minRatio: 1.4, maxRatio: 7, minWidth: 1600 },
-    wide: { minRatio: 1.2, maxRatio: 7, minWidth: 1600 },
-    sign: { minRatio: 1.0, maxRatio: 4, minWidth: 1200 }
+    fortune: BJT,
+    sign: BJT,
+    wide: SCENIC
   }
-  return pickGalleryFile(presets[purpose] || presets.wide)
+  return pickGalleryFile(presets[purpose] || SCENIC)
 }
 
 export function coverImgHtml (filePath, boxW, boxH) {
