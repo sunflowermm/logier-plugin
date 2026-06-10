@@ -1,6 +1,7 @@
-import { Data, Version, Plugin_Name } from './index.js'
+import { Plugin_Name } from './constants.js'
+import Data from './Data.js'
 import puppeteer from '../../../lib/puppeteer/puppeteer.js'
-import fs from 'fs'
+import { FileUtils } from '../../../lib/utils/file-utils.js'
 
 const _path = process.cwd()
 const INLINE_TPL = `./plugins/${Plugin_Name}/resources/common/inline.html`
@@ -115,9 +116,9 @@ export default async function render (tplPath, params, cfg = {}) {
 
   if (process.argv.includes('web-debug')) {
     const saveDir = `${_path}/data/ViewData/`
-    if (!fs.existsSync(saveDir)) fs.mkdirSync(saveDir)
+    FileUtils.ensureDirSync(saveDir)
     data._app = app
-    fs.writeFileSync(`${saveDir}${tpl}.json`, JSON.stringify(data))
+    FileUtils.writeFileSync(`${saveDir}${tpl}.json`, JSON.stringify(data))
   }
 
   const base64 = await puppeteer.screenshot(`${Plugin_Name}/${app}/${tpl}`, data)

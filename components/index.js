@@ -1,6 +1,4 @@
-const Path = process.cwd();
-const Plugin_Name = 'logier-plugin'
-const Plugin_Path = `${Path}/plugins/${Plugin_Name}`;
+import { Path, Plugin_Name, Plugin_Path } from './constants.js'
 import Version from './Version.js'
 import Data from './Data.js'
 import render, {
@@ -11,6 +9,7 @@ import render, {
   atUser,
   PLUGIN_RENDER_OPTS
 } from './renderer.js'
+
 export {
   render,
   renderHtmlImage,
