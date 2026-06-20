@@ -34,9 +34,9 @@ export const helpList = [
       { icon: 19, title: '#每日塔罗', desc: '每日一牌，同日结果不变' },
       { icon: 20, title: '#查牌 名称', desc: '正逆位牌义' },
       { icon: 13, title: '#彩虹塔罗', desc: '大阿卡纳单牌' },
-      { icon: 14, title: '#牌阵列表', desc: '全部牌阵名称与位置' },
-      { icon: 15, title: '#塔罗帮助', desc: '塔罗指令文字说明' },
-      { icon: 16, title: '#塔罗牌库', desc: '78 张牌编号索引' }
+      { icon: 14, title: '#牌阵列表', desc: '合并转发：全部牌阵预览图与牌位' },
+      { icon: 21, title: '#塔罗帮助', desc: '塔罗指令文字说明' },
+      { icon: 22, title: '#塔罗牌库', desc: '合并转发：78张牌面与编号索引' }
     ]
   },
   {

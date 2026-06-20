@@ -7,14 +7,13 @@ import {
   drawMajorRainbow,
   drawLookup,
   drawDaily,
-  listFormationsText,
   listHelpText,
-  listCardIndex,
   parseSpreadInput,
   resolveFormation,
   toCardView,
   toSpreadView
 } from '../model/tarot.js'
+import { replyFormationListForward, replyCardIndexForward } from '../utils/tarot-forward.js'
 
 const DEFAULT_FORMATION = '圣三角牌阵'
 
@@ -54,13 +53,13 @@ export class TextMsg extends plugin {
     return true
   }
 
-  async 牌阵列表 () {
-    await this.e.reply(['可用牌阵（#牌阵 名称）：', listFormationsText()].join('\n\n'))
+  async 牌阵列表 (e) {
+    await replyFormationListForward(e)
     return true
   }
 
-  async 塔罗牌库 () {
-    await this.e.reply(listCardIndex())
+  async 塔罗牌库 (e) {
+    await replyCardIndexForward(e)
     return true
   }
 

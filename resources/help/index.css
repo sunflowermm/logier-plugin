@@ -1,14 +1,26 @@
-/* 背景由 Helptheme 注入随机 wall 图；此处仅保留结构与毛玻璃样式 */
+/* 背景图由 Helptheme 注入；气泡透明度以此为准（!important 防止 config/help.js 旧值覆盖） */
 body.elem-default,
 body.elem-hydro {
   transform: scale(1) !important;
-  transform-origin: top left;
+  transform-origin: top left !important;
+  width: 1280px !important;
+  min-width: 1280px !important;
+  min-height: 100% !important;
+}
+
+body.elem-default .container,
+body.elem-hydro .container {
+  width: 1280px !important;
+  max-width: 1280px !important;
+  padding: 0 36px 48px !important;
+  background: none !important;
+  box-sizing: border-box !important;
 }
 
 .info-box {
   margin: 0 -36px;
   padding: 40px 36px 28px;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.18) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.18) 0%, transparent 100%) !important;
 }
 
 .head-box {
@@ -34,9 +46,11 @@ body.elem-hydro {
   margin-top: 16px;
   margin-bottom: 16px;
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.38);
-  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.36) !important;
+  background: rgba(255, 255, 255, 0.46) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
 }
 
 .help-group {
@@ -44,6 +58,7 @@ body.elem-hydro {
   font-weight: 700;
   padding: 14px 18px 10px 20px;
   border-left: 4px solid #5eead4;
+  background: linear-gradient(90deg, rgba(94, 234, 212, 0.12), rgba(255, 255, 255, 0.18)) !important;
 }
 
 .help-table {
@@ -61,16 +76,25 @@ body.elem-hydro {
   display: table-row;
 }
 
+.help-table .tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.help-table .tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.22) !important;
+}
+
 .help-table .td,
 .help-table .th {
   font-size: 14px;
   display: table-cell;
-  box-shadow: 0 0 1px 0 rgba(100, 116, 139, 0.2) inset;
+  box-shadow: 0 0 1px 0 rgba(100, 116, 139, 0.15) inset;
   padding: 12px 8px 12px 52px;
   line-height: 24px;
   position: relative;
   text-align: left;
   vertical-align: middle;
+  background: transparent !important;
 }
 
 .help-table .tr:last-child .td {

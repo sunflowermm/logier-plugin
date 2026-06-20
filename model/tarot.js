@@ -2,7 +2,7 @@ import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { FileUtils } from '../../../lib/utils/file-utils.js'
 import { readAndParseJSON } from '../utils/getdate.js'
-import { pluginResources } from './path.js'
+import { pluginResources, pluginRoot } from './path.js'
 
 const tarotData = await readAndParseJSON('../data/tarot.json')
 const CARD_DIR = path.join(pluginResources, 'tarot', 'cards')
@@ -258,6 +258,40 @@ export function spreadPreviewName (formationName) {
   return `spread-${previewSlug(formationName)}.png`
 }
 
+export function getSpreadPreviewPath (formationName) {
+  const file = path.join(pluginRoot, 'docs/previews', spreadPreviewName(formationName))
+  return FileUtils.existsSync(file) ? file : null
+}
+
+export function getCardImagePath (cardKey) {
+  return cardFile(cardKey)
+}
+
+export function listFormationBriefs ({ internal = false } = {}) {
+  return Object.entries(formations)
+    .filter(([, cfg]) => internal || !cfg.internal)
+    .map(([name, cfg]) => ({
+      name,
+      labels: cfg.positions?.[0] || []
+    }))
+}
+
+export function listCardsGrouped () {
+  const groups = { MajorArcana: [], Swords: [], Wands: [], Cups: [], Pentacles: [] }
+  for (const [key, card] of Object.entries(cards)) {
+    if (groups[card.type]) groups[card.type].push({ key, name: card.name_cn })
+  }
+  for (const type of Object.keys(groups)) {
+    groups[type].sort((a, b) => {
+      const na = Number(a.key)
+      const nb = Number(b.key)
+      if (!Number.isNaN(na) && !Number.isNaN(nb)) return na - nb
+      return String(a.key).localeCompare(String(b.key))
+    })
+  }
+  return groups
+}
+
 export function listFormationNames ({ internal = false } = {}) {
   return Object.entries(formations)
     .filter(([, cfg]) => internal || !cfg.internal)
@@ -353,36 +387,17 @@ export function toSpreadView (spread, meta = {}) {
   }
 }
 
-export function listFormationsText () {
-  return Object.entries(formations)
-    .filter(([, cfg]) => !cfg.internal)
-    .map(([name, cfg]) => {
-      const labels = cfg.positions?.[0] || []
-      return `${name}（${labels.length}张）\n  ${labels.join(' · ')}`
-    }).join('\n\n')
-}
-
 export function listHelpText () {
   return [
     '#塔罗 [主题] — 单牌',
     '#二牌 [主题] — 现状 / 指引',
     '#占卜 [主题] — 圣三角牌阵',
     '#牌阵 名称 [主题] — 指定牌阵（可连写，如 #牌阵圣三角我今天高兴吗）',
-    '#牌阵列表 — 全部牌阵',
+    '#牌阵列表 — 合并转发牌阵预览',
     '#查牌名称 — 正逆位牌义（#查牌愚者 或 #查牌 愚者）',
     '#每日塔罗 — 每日一牌',
     '#彩虹塔罗 — 大阿卡纳单牌',
-    '#塔罗牌库 — 78张索引',
+    '#塔罗牌库 — 合并转发78张牌面',
     '#塔罗帮助 — 本说明'
   ].join('\n')
-}
-
-export function listCardIndex () {
-  const groups = { MajorArcana: [], Swords: [], Wands: [], Cups: [], Pentacles: [] }
-  for (const [key, card] of Object.entries(cards)) {
-    groups[card.type]?.push(`${key}.${card.name_cn}`)
-  }
-  return Object.entries(groups).map(([type, list]) =>
-    `${TYPE_LABEL[type] || type}\n${list.join(' · ')}`
-  ).join('\n\n')
 }

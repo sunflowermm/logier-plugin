@@ -4,6 +4,7 @@ import { Data } from '../../components/index.js'
 const PAGE_W = 1280
 const SIDE_PAD = 36
 
+/** 仅注入背景图、列宽与文字色；气泡透明度由 index.css 固定 */
 const Theme = {
   async getThemeData (diyStyle, sysStyle, bgUrl) {
     const helpConfig = lodash.extend({}, sysStyle, diyStyle)
@@ -30,11 +31,6 @@ const Theme = {
       background:none!important;
       box-sizing:border-box;
     }
-    .info-box{
-      margin:0 -${SIDE_PAD}px;
-      padding:40px ${SIDE_PAD}px 28px;
-      background:linear-gradient(180deg,rgba(15,23,42,0.18) 0%,transparent 100%);
-    }
     .help-table .td,.help-table .th{width:${100 / colCount}%}
     `]
 
@@ -48,11 +44,6 @@ const Theme = {
     css('.head-box .title', 'color', 'titleColor', '#f8fafc')
     css('.head-box .label', 'color', 'subTitleColor', 'rgba(248,250,252,0.88)')
     css('.help-desc', 'color', 'descColor', '#475569')
-    css('.cont-box', 'background', 'contBgColor', 'rgba(255,255,255,0.50)')
-    css('.cont-box', 'backdrop-filter', 'contBgBlur', 6, (n) => diyStyle.bgBlur === false ? 'none' : `blur(${n}px)`)
-    css('.help-group', 'background', 'headerBgColor', 'linear-gradient(90deg,rgba(94,234,212,0.14),rgba(255,255,255,0.22))')
-    css('.help-table .tr:nth-child(odd)', 'background', 'rowBgColor1', 'rgba(255,255,255,0.14)')
-    css('.help-table .tr:nth-child(even)', 'background', 'rowBgColor2', 'rgba(255,255,255,0.24)')
 
     return {
       style: `<style>${ret.join('\n')}</style>`,
