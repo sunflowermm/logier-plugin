@@ -17,7 +17,7 @@ const Theme = {
       min-height:100%;
       background-color:#0f172a;
       background-image:
-        linear-gradient(180deg,rgba(15,23,42,0.42) 0%,rgba(15,23,42,0.58) 45%,rgba(15,23,42,0.82) 100%),
+        linear-gradient(180deg,rgba(15,23,42,0.12) 0%,rgba(15,23,42,0.22) 45%,rgba(15,23,42,0.42) 100%),
         url(${bgUrl});
       background-repeat:no-repeat;
       background-position:center top;
@@ -33,7 +33,7 @@ const Theme = {
     .info-box{
       margin:0 -${SIDE_PAD}px;
       padding:40px ${SIDE_PAD}px 28px;
-      background:linear-gradient(180deg,rgba(15,23,42,0.35) 0%,transparent 100%);
+      background:linear-gradient(180deg,rgba(15,23,42,0.18) 0%,transparent 100%);
     }
     .help-table .td,.help-table .th{width:${100 / colCount}%}
     `]
@@ -48,11 +48,11 @@ const Theme = {
     css('.head-box .title', 'color', 'titleColor', '#f8fafc')
     css('.head-box .label', 'color', 'subTitleColor', 'rgba(248,250,252,0.88)')
     css('.help-desc', 'color', 'descColor', '#475569')
-    css('.cont-box', 'background', 'contBgColor', 'rgba(255,255,255,0.78)')
-    css('.cont-box', 'backdrop-filter', 'contBgBlur', 10, (n) => diyStyle.bgBlur === false ? 'none' : `blur(${n}px)`)
-    css('.help-group', 'background', 'headerBgColor', 'linear-gradient(90deg,rgba(94,234,212,0.22),rgba(255,255,255,0.35))')
-    css('.help-table .tr:nth-child(odd)', 'background', 'rowBgColor1', 'rgba(255,255,255,0.28)')
-    css('.help-table .tr:nth-child(even)', 'background', 'rowBgColor2', 'rgba(255,255,255,0.42)')
+    css('.cont-box', 'background', 'contBgColor', 'rgba(255,255,255,0.50)')
+    css('.cont-box', 'backdrop-filter', 'contBgBlur', 6, (n) => diyStyle.bgBlur === false ? 'none' : `blur(${n}px)`)
+    css('.help-group', 'background', 'headerBgColor', 'linear-gradient(90deg,rgba(94,234,212,0.14),rgba(255,255,255,0.22))')
+    css('.help-table .tr:nth-child(odd)', 'background', 'rowBgColor1', 'rgba(255,255,255,0.14)')
+    css('.help-table .tr:nth-child(even)', 'background', 'rowBgColor2', 'rgba(255,255,255,0.24)')
 
     return {
       style: `<style>${ret.join('\n')}</style>`,

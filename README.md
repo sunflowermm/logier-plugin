@@ -82,11 +82,7 @@ git clone --depth=1 https://github.com/sunflowermm/logier-plugin ./plugins/logie
 
 ## 渲染预览
 
-由 `scripts/render-all-test.mjs` 预渲染，PNG 在 `docs/previews/`。改布局后重跑：
-
-```bash
-node plugins/logier-plugin/scripts/render-all-test.mjs
-```
+以下为随仓库发布的预渲染 PNG（`docs/previews/`），改布局后由维护者本地重渲并提交更新即可。
 
 | 圣三角牌阵 | 时间之流牌阵 |
 |:---:|:---:|
@@ -153,7 +149,6 @@ logier-plugin/
 ├── apps/Tarot.js
 ├── guoba.support.js         # 锅巴下拉选牌阵
 ├── resources/tarot/
-├── scripts/render-all-test.mjs
 └── docs/previews/*.png
 ```
 
@@ -168,8 +163,8 @@ logier-plugin/
 | `resources/tarot/cards/` | 78 张塔罗牌面 |
 | `resources/tarot/spread.css` | 牌阵物理布局 |
 | `data/tarot.json` | 牌义、layouts、formations |
+| `resources/gallery/wall-*` | 运势/帮助等随机风景背景 |
 | `docs/previews/` | README 展示用预渲染 PNG |
-| `scripts/render-all-test.mjs` | 全量预渲染（塔罗 + 运势/签到等） |
 
 ## 原作者与鸣谢
 

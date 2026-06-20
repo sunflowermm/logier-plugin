@@ -8,8 +8,8 @@ const GALLERY_DIR = path.join(pluginRoot, 'resources/gallery')
 const IMAGE_EXT = new Set(['.jpg', '.png', '.gif', '.jpeg', '.webp'])
 const FALLBACK = path.join(GALLERY_DIR, 'wall-a_cartoon_of_a_house_on_a_cliff.png')
 
-/** 超级英雄/梗图/低高度超宽条带/竖图/纯色小块等不适合配图 */
-const EXCLUDE_NAME = /^(92095127|114388636|Vmake|wall-(Spider-man|Antman|Black-panther|Groot|Kratos|Luffy|Jurassic|dino|Trex|4k-keyboard|abstract|abandoned|Bix57|Z5hj|4k-ai-mountain|Computerized|TokyoSimplistic|3squares))/i
+/** 超级英雄/梗图/低高度超宽条带/竖图/纯色小块/动漫 distro 等非风景壁纸 */
+const EXCLUDE_NAME = /^(92095127|114388636|Vmake|wall-(36592|Doodle|Fedora|Mint|a_cartoon|Spider-man|Antman|Black-panther|Groot|Kratos|Luffy|Jurassic|dino|Trex|4k-keyboard|abstract|abandoned|Bix57|Z5hj|4k-ai-mountain|Computerized|TokyoSimplistic|3squares))/i
 
 /** 读取本地图片宽高（无需额外依赖） */
 export function readImageSize (filePath) {
