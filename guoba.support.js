@@ -1,10 +1,12 @@
 import path from 'path'
-import setting from './model/setting.js'
-import lodash from 'lodash'
+import { listFormationOptions } from './model/tarot.js'
+import { getTarotConfig, saveTarotConfig } from './model/tarot-config.js'
 
-const _path = process.cwd() + '/plugins/logier-plugin'
+const pluginRoot = path.join(process.cwd(), 'plugins/logier-plugin')
 
 export function supportGuoba () {
+  const formationOptions = listFormationOptions()
+
   return {
     pluginInfo: {
       name: '鸢尾花插件',
@@ -17,26 +19,25 @@ export function supportGuoba () {
       description: '运势系列与塔罗占卜（本地渲染）',
       icon: 'mdi:stove',
       iconColor: '#d19f56',
-      iconPath: path.join(_path, 'resources/img/-zue37Q5-e39pZlT3cSiw-il.jpeg')
+      iconPath: path.join(pluginRoot, 'resources/img/logo.png')
     },
     configInfo: {
       schemas: [
         {
-          field: 'Tarot.defaultFormation',
+          field: 'defaultFormation',
           label: '默认牌阵',
-          bottomHelpMessage: '#占卜 使用的牌阵名称',
-          component: 'Input'
+          bottomHelpMessage: '#占卜 使用的牌阵；亦可在 XRK 控制台编辑「鸢尾花 · 塔罗」',
+          component: 'Select',
+          componentProps: { options: formationOptions }
         }
       ],
-      getConfigData () {
-        return setting.merge()
+      async getConfigData () {
+        return getTarotConfig()
       },
-      setConfigData (data, { Result }) {
-        const config = {}
-        for (const [keyPath, value] of Object.entries(data)) {
-          lodash.set(config, keyPath, value)
-        }
-        setting.analysis(lodash.merge({}, setting.merge(), config))
+      async setConfigData (data, { Result }) {
+        const value = data.defaultFormation ?? data['Tarot.defaultFormation']
+        if (!value) return Result.error({}, '请选择默认牌阵')
+        await saveTarotConfig({ defaultFormation: value })
         return Result.ok({}, '保存成功~')
       }
     }

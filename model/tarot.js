@@ -1,8 +1,9 @@
 import path from 'node:path'
-import fs from 'node:fs'
 import { pathToFileURL } from 'node:url'
+import { FileUtils } from '../../../lib/utils/file-utils.js'
 import { readAndParseJSON } from '../utils/getdate.js'
 import { pluginResources } from './path.js'
+
 const tarotData = await readAndParseJSON('../data/tarot.json')
 const CARD_DIR = path.join(pluginResources, 'tarot', 'cards')
 const REDIS_DAILY_PREFIX = 'Yunzai:logier-plugin:tarot:daily'
@@ -15,13 +16,24 @@ const TYPE_LABEL = {
   Pentacles: '星币'
 }
 
-const PAIR_LABELS = ['现状', '指引']
+/** slotUi → 牌面朝向文案（仅横放/竖放等特殊朝向） */
+const SLOT_ORIENT = {
+  'cross-under': '竖放',
+  'cross-overlay': '横放',
+  'landscape-f4': '横放'
+}
 
-const formations = tarotData.formations
-const cards = tarotData.cards
+const LAYOUTS = tarotData?.layouts || {}
+const formations = tarotData?.formations || {}
+const cards = tarotData?.cards || {}
 
 const SUIT_PREFIX = { Swords: 's', Wands: 'w', Cups: 'c', Pentacles: 'p' }
 const COURT_NUM = { 侍从: 11, 骑士: 12, 王后: 13, 国王: 14 }
+
+function formationAliases (name, cfg) {
+  const set = new Set([name, name.replace(/牌阵$/, ''), ...(cfg.aliases || [])])
+  return [...set].filter(Boolean).sort((a, b) => b.length - a.length)
+}
 
 function resolveImageName (key, card) {
   if (card?.image) return card.image
@@ -45,9 +57,10 @@ function cardFile (cardKey) {
   const card = cards[cardKey]
   const image = resolveImageName(cardKey, card)
   const file = path.join(CARD_DIR, image)
-  if (fs.existsSync(file)) return file
+  if (FileUtils.existsSync(file)) return file
   return path.join(CARD_DIR, 'a0.webp')
 }
+
 function cardImageUrl (cardKey) {
   return pathToFileURL(cardFile(cardKey)).href
 }
@@ -71,14 +84,111 @@ function pickRandomKeys (count, excludeKeys = []) {
   return picked
 }
 
+function pickFormationLabels (formation) {
+  const variants = formation.positions || [[]]
+  return variants[Math.floor(Math.random() * variants.length)]
+}
+
+function getLayout (formation) {
+  const labels = pickFormationLabels(formation)
+  const layout = LAYOUTS[formation.layout]
+  if (!layout || layout.areas.length !== labels.length) return null
+  return { labels, layout }
+}
+
+function slotTitle (nameCn, slotClass = '') {
+  const orient = SLOT_ORIENT[slotClass]
+  return orient ? `${nameCn} · ${orient}` : nameCn
+}
+
+function attachLayoutSlots (slots, layout) {
+  return slots.map((slot, i) => {
+    const slotClass = layout.slotUi?.[i] || ''
+    return {
+      ...slot,
+      gridArea: layout.areas[i],
+      slotClass,
+      seq: i + 1,
+      title: slotTitle(slot.card.name_cn, slotClass)
+    }
+  })
+}
+
+function extractCrossCenter (slots) {
+  const underI = slots.findIndex(s => s.slotClass === 'cross-under')
+  const overI = slots.findIndex(s => s.slotClass === 'cross-overlay')
+  if (underI < 0 || overI < 0) return { slots, crossCenter: null }
+  return {
+    crossCenter: { under: slots[underI], over: slots[overI] },
+    slots: slots.filter((_, i) => i !== underI && i !== overI)
+  }
+}
+
+function buildSpread (formationName, labels, layout) {
+  const count = labels.length
+  return {
+    formationName,
+    slotCount: count,
+    width: layout.width,
+    cardWidth: layout.cardWidth,
+    gridClass: layout.gridClass,
+    slots: attachLayoutSlots(
+      pickRandomKeys(count).map((key, i) => buildSlot(key, labels[i] || `第${i + 1}张`)),
+      layout
+    )
+  }
+}
+
+/** 校验牌阵与布局配置是否一致（测试脚本用） */
+export function validateTarotConfig () {
+  const errors = []
+  for (const [name, cfg] of Object.entries(formations)) {
+    const labels = cfg.positions?.[0] || []
+    if (!labels.length) errors.push(`${name}: 缺少 positions`)
+    if (!cfg.layout) errors.push(`${name}: 缺少 layout`)
+    else if (!LAYOUTS[cfg.layout]) errors.push(`${name}: 未知 layout「${cfg.layout}」`)
+    else if (LAYOUTS[cfg.layout].areas.length !== labels.length) {
+      errors.push(`${name}: layout 区域数 ${LAYOUTS[cfg.layout].areas.length} ≠ 牌位 ${labels.length}`)
+    }
+  }
+  return errors
+}
+
 export function resolveFormation (name = '') {
   const query = String(name).trim()
   if (!query) return null
   if (formations[query]) return { name: query, ...formations[query] }
 
-  const keys = Object.keys(formations)
-  const hit = keys.find(k => k.includes(query) || query.includes(k.replace(/牌阵$/, '')))
-  return hit ? { name: hit, ...formations[hit] } : null
+  for (const [nameKey, cfg] of Object.entries(formations)) {
+    for (const alias of formationAliases(nameKey, cfg)) {
+      if (query === alias || query.includes(alias) || alias.includes(query)) {
+        return { name: nameKey, ...cfg }
+      }
+    }
+  }
+  return null
+}
+
+export function parseSpreadInput (rest = '') {
+  const raw = String(rest || '').trim()
+  if (!raw) return { formationQuery: '', topic: '' }
+
+  if (/\s/.test(raw)) {
+    const parts = raw.split(/\s+/)
+    const formationQuery = parts.shift()
+    return { formationQuery, topic: parts.join(' ').trim() }
+  }
+
+  const sorted = Object.entries(formations).sort((a, b) => b[0].length - a[0].length)
+  for (const [name, cfg] of sorted) {
+    for (const alias of formationAliases(name, cfg)) {
+      if (raw.startsWith(alias)) {
+        return { formationQuery: name, topic: raw.slice(alias.length).trim() }
+      }
+    }
+  }
+
+  return { formationQuery: raw, topic: '' }
 }
 
 export function resolveCard (query = '') {
@@ -118,23 +228,6 @@ export function resolveCard (query = '') {
   return best
 }
 
-function pickFormationLabels (formation) {
-  const variants = formation.representations || [[]]
-  return variants[Math.floor(Math.random() * variants.length)]
-}
-
-function spreadLayout (count) {
-  const layouts = {
-    2: { gridClass: 'layout-2', width: 960, compact: false, cardWidth: 200 },
-    3: { gridClass: 'layout-3', width: 1080, compact: false, cardWidth: 188 },
-    4: { gridClass: 'layout-4', width: 1080, compact: false, cardWidth: 180 },
-    5: { gridClass: 'layout-5', width: 1200, compact: true, cardWidth: 148 },
-    6: { gridClass: 'layout-6', width: 1260, compact: true, cardWidth: 140 },
-    7: { gridClass: 'layout-7', width: 1320, compact: true, cardWidth: 128 }
-  }
-  return layouts[count] || layouts[7]
-}
-
 export function buildSlot (key, role = '抽牌', up) {
   const card = cards[key]
   const pos = drawPosition(card, up)
@@ -152,27 +245,37 @@ export function buildSlot (key, role = '抽牌', up) {
 export function drawSpread (formationName) {
   const formation = resolveFormation(formationName)
   if (!formation) return null
-
-  const labels = pickFormationLabels(formation)
-  const count = Math.max(labels.length, formation.cards_num || labels.length)
-  const layout = spreadLayout(Math.min(count, 7))
-
-  return {
-    formationName: formation.name,
-    slotCount: count,
-    ...layout,
-    slots: pickRandomKeys(count).map((key, i) => buildSlot(key, labels[i] || `第${i + 1}张`))
-  }
+  const resolved = getLayout(formation)
+  if (!resolved) return null
+  return buildSpread(formation.name, resolved.labels, resolved.layout)
 }
 
-export function drawPair () {
-  const layout = spreadLayout(2)
-  return {
-    formationName: '二牌阵',
-    slotCount: 2,
-    ...layout,
-    slots: pickRandomKeys(2).map((key, i) => buildSlot(key, PAIR_LABELS[i]))
-  }
+function previewSlug (name) {
+  return String(name).replace(/[^\w\u4e00-\u9fff]+/g, '-').replace(/^-|-$/g, '') || 'spread'
+}
+
+export function spreadPreviewName (formationName) {
+  return `spread-${previewSlug(formationName)}.png`
+}
+
+export function listFormationNames ({ internal = false } = {}) {
+  return Object.entries(formations)
+    .filter(([, cfg]) => internal || !cfg.internal)
+    .map(([name]) => name)
+}
+
+/** CommonConfig / 锅巴 Select 选项（公开牌阵） */
+export function listFormationOptions () {
+  return Object.entries(formations)
+    .filter(([, cfg]) => !cfg.internal)
+    .map(([name, cfg]) => {
+      const count = cfg.positions?.[0]?.length ?? 0
+      return { label: `${name}（${count}张）`, value: name }
+    })
+}
+
+export function listFormationEnum () {
+  return listFormationOptions().map(o => o.value)
 }
 
 export function drawSingle () {
@@ -216,10 +319,9 @@ export async function drawDaily (userId) {
 }
 
 export function toCardView (draw, title, extra = {}) {
-  const cardWidth = Math.round(318)
   return {
     width: 1080,
-    cardWidth,
+    cardWidth: 318,
     title,
     nameCn: draw.card.name_cn,
     nameEn: draw.card.name_en,
@@ -234,26 +336,30 @@ export function toCardView (draw, title, extra = {}) {
   }
 }
 
-export function toSpreadView (spread, title) {
+export function toSpreadView (spread, meta = {}) {
+  const { userName = '', topic = '' } = meta
+  const { slots, crossCenter } = extractCrossCenter(spread.slots)
   return {
     width: spread.width,
-    title,
+    userName,
+    topic,
     formationName: spread.formationName,
     gridClass: spread.gridClass,
     cardWidth: spread.cardWidth,
     slotCount: spread.slotCount,
-    compact: spread.compact,
-    slots: spread.slots,
+    slots,
+    crossCenter,
     bodyClass: `tarot-render w-${spread.width}`
   }
 }
 
 export function listFormationsText () {
-  return Object.entries(formations).map(([name, cfg]) => {
-    const labels = cfg.representations?.[0] || []
-    const count = Math.max(labels.length, cfg.cards_num || 0)
-    return `${name}（${count}张）\n  ${labels.join(' · ')}`
-  }).join('\n\n')
+  return Object.entries(formations)
+    .filter(([, cfg]) => !cfg.internal)
+    .map(([name, cfg]) => {
+      const labels = cfg.positions?.[0] || []
+      return `${name}（${labels.length}张）\n  ${labels.join(' · ')}`
+    }).join('\n\n')
 }
 
 export function listHelpText () {
@@ -261,7 +367,7 @@ export function listHelpText () {
     '#塔罗 [主题] — 单牌',
     '#二牌 [主题] — 现状 / 指引',
     '#占卜 [主题] — 圣三角牌阵',
-    '#牌阵 名称 [主题] — 指定牌阵',
+    '#牌阵 名称 [主题] — 指定牌阵（可连写，如 #牌阵圣三角我今天高兴吗）',
     '#牌阵列表 — 全部牌阵',
     '#查牌名称 — 正逆位牌义（#查牌愚者 或 #查牌 愚者）',
     '#每日塔罗 — 每日一牌',

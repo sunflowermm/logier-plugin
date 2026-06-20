@@ -6,15 +6,9 @@
 
 .spread-head {
   text-align: center;
-  margin-bottom: 18px;
-  padding-bottom: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.spread-tag {
-  margin: 0 0 4px;
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.42);
 }
 
 .spread-name {
@@ -22,46 +16,54 @@
   font-size: 32px;
 }
 
+.spread-question {
+  margin: 10px auto 0;
+  max-width: 92%;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #3d2f66;
+  background: rgba(90, 70, 144, 0.08);
+  border-radius: 10px;
+  border: 1px solid rgba(90, 70, 144, 0.15);
+}
+
+.spread-question-label {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 2px 8px;
+  font-size: 13px;
+  color: #fff;
+  background: #5a4690;
+  border-radius: 6px;
+  vertical-align: middle;
+}
+
+.spread-user {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.42);
+}
+
 .spread-count {
-  margin: 6px 0 0;
+  margin: 8px 0 0;
   font-size: 14px;
   color: rgba(0, 0, 0, 0.45);
 }
 
 .spread-grid {
   display: grid;
-  gap: 16px;
+  gap: 14px;
   align-items: start;
-}
-
-.spread-grid.layout-2 {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.spread-grid.layout-3 {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.spread-grid.layout-4 {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.spread-grid.layout-5 {
-  grid-template-columns: repeat(5, 1fr);
-}
-
-.spread-grid.layout-6 {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.spread-grid.layout-7 {
-  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
 }
 
 .spread-slot {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: calc(var(--slot-card-w, 188px) + 24px);
   background: rgba(255, 255, 255, 0.82);
   border-radius: 14px;
   padding: 12px 10px 14px;
@@ -71,42 +73,135 @@
 .spread-slot .tarot-card-frame {
   width: var(--slot-card-w, 188px);
   margin-bottom: 10px;
+  transition: transform 0.15s ease;
+}
+
+.spread-slot.is-focus {
+  background: rgba(90, 70, 144, 0.07);
+  border: 1px solid rgba(90, 70, 144, 0.16);
+}
+
+.layout-grand-cross .spread-slot.is-focus {
+  background: rgba(60, 90, 120, 0.07);
+  border-color: rgba(60, 90, 120, 0.16);
+}
+
+/* 牌面倾斜（正逆位在 img 内 rotate(180deg)）— 仅保留 tarot.json slotUi 引用的角度 */
+.spread-slot.tilt-m26 .tarot-card-frame { transform: rotate(-26deg); }
+.spread-slot.tilt-m18 .tarot-card-frame { transform: rotate(-18deg); }
+.spread-slot.tilt-m12 .tarot-card-frame { transform: rotate(-12deg); }
+.spread-slot.tilt-m8 .tarot-card-frame { transform: rotate(-8deg); }
+.spread-slot.tilt-m4 .tarot-card-frame { transform: rotate(-4deg); }
+.spread-slot.tilt-p4 .tarot-card-frame { transform: rotate(4deg); }
+.spread-slot.tilt-p8 .tarot-card-frame { transform: rotate(8deg); }
+.spread-slot.tilt-p18 .tarot-card-frame { transform: rotate(18deg); }
+.spread-slot.tilt-p26 .tarot-card-frame { transform: rotate(26deg); }
+
+.spread-slot.landscape-f4 .tarot-card-frame {
+  transform: rotate(90deg);
+  margin: calc(var(--slot-card-w, 170px) * 0.34) auto calc(var(--slot-card-w, 170px) * 0.16);
+}
+
+/* 凯尔特十字中心：竖牌垫底 + 横牌半透明叠放；横竖标注在牌名标题 */
+.spread-slot.cross-center {
+  max-width: calc(var(--slot-card-w, 115px) + 64px);
+}
+
+.cross-center__stack {
+  position: relative;
+  width: var(--slot-card-w, 115px);
+  margin: 0 auto 10px;
+  aspect-ratio: 200 / 340;
+}
+
+.cross-center__under {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.cross-center__under .tarot-card-frame {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.cross-center__over {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  width: var(--slot-card-w, 115px);
+  transform: translate(-50%, -50%);
+}
+
+.cross-center__over-frame {
+  width: 100%;
+  margin-bottom: 0;
+  transform: rotate(90deg);
+  opacity: 0.78;
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.cross-center__over-copy {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(61, 90, 128, 0.16);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.cross-center__over-copy .slot-name {
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.cross-center__over-copy .slot-meta {
+  margin-bottom: 4px;
+}
+
+.cross-center__over-copy .slot-meaning {
+  max-height: 48px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.cross-center__detail {
+  width: 100%;
+  padding: 8px 10px 10px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(90, 70, 144, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.cross-center__detail .slot-meaning {
+  max-height: 56px;
 }
 
 .slot-role {
   width: 100%;
-  min-height: 40px;
+  min-height: 38px;
   margin-bottom: 8px;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.4;
   text-align: center;
   color: #5a4690;
 }
 
-.spread-grid.is-compact .slot-role {
-  font-size: 13px;
-  min-height: 34px;
-}
-
-.spread-grid.is-compact .slot-name {
-  font-size: 17px;
-}
-
-.spread-grid.is-compact .slot-meaning {
-  font-size: 12px;
-  max-height: 72px;
-}
-
 .slot-name {
   width: 100%;
-  font-size: 19px;
+  font-size: 18px;
   margin-bottom: 4px;
   text-align: center;
 }
 
 .slot-meta {
   width: 100%;
-  font-size: 13px;
+  font-size: 12px;
   color: rgba(0, 0, 0, 0.45);
   margin-bottom: 6px;
   text-align: center;
@@ -114,10 +209,193 @@
 
 .slot-meaning {
   width: 100%;
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 12px;
+  line-height: 1.55;
   color: rgba(0, 0, 0, 0.6);
   text-align: left;
-  max-height: 96px;
+  max-height: 72px;
   overflow: hidden;
+}
+
+.layout-triangle {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    ". t ."
+    "bl . br";
+}
+
+.layout-timeline-3 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: "p n f";
+  align-items: start;
+}
+
+.layout-timeline-3 .spread-slot[data-seq="1"]::after,
+.layout-timeline-3 .spread-slot[data-seq="2"]::after {
+  content: "→";
+  display: block;
+  margin-top: 8px;
+  text-align: center;
+  color: rgba(90, 70, 144, 0.32);
+  font-size: 20px;
+}
+
+.layout-diamond-4 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    ". t ."
+    "l . r"
+    ". b .";
+}
+
+.layout-cross-5 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    ". past ."
+    "cause core future"
+    ". result .";
+}
+
+.layout-gypsy-cross {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    ". top ."
+    "left center right"
+    ". bottom .";
+}
+
+.layout-grand-cross {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    "gc1 . gc2"
+    ". gc5 ."
+    "gc3 . gc4";
+}
+
+.layout-horseshoe-7 {
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    ". h1 h2 h3 ."
+    "h4 . . . h5"
+    ". h6 h7 . .";
+}
+
+/* 六芒星：圣三角(1-2-3) + 魔三角(4-5-6) + 中心结果(7) */
+.layout-hexagram-7 {
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(4, auto);
+  grid-template-areas:
+    ". . a . ."
+    ". f . b ."
+    "e . g . c"
+    ". . d . .";
+  gap: 6px 4px;
+}
+
+/* 平安扇：1→2→3 扇开，4 结论横放居中 */
+.layout-fan-4 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "f1 f2 f3"
+    ". f4 .";
+  gap: 10px 8px;
+}
+
+.layout-fan-4 .spread-slot[data-seq="1"]::after,
+.layout-fan-4 .spread-slot[data-seq="2"]::after {
+  content: "→";
+  display: block;
+  margin-top: 6px;
+  text-align: center;
+  color: rgba(90, 70, 144, 0.28);
+  font-size: 18px;
+}
+
+/* 沙迪若之星：1 顶 · 4-2-3 中排 · 5-6 底排（牌位 1–6 顺序） */
+.layout-hexagon-6 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, auto);
+  grid-template-areas:
+    ". s1 ."
+    "s4 s2 s3"
+    ". s5 s6";
+}
+
+/* 凯尔特十字：十字 + 右侧权杖列（7→8→9→10 自下而上）；中心 cc1/cc2 由 cross-center 渲染 */
+.layout-celtic-cross {
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: auto auto auto auto;
+  grid-template-areas:
+    ". . cc5 . . cc10"
+    ". cc4 cc1 cc6 . cc9"
+    ". . cc3 . . cc8"
+    ". . . . . cc7";
+  gap: 8px 6px;
+}
+
+.layout-column-3 {
+  grid-template-columns: 1fr;
+  grid-template-areas: "c1" "c2" "c3";
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.layout-choice-5 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    ". situation ."
+    "a1 . a2"
+    "out1 . out2";
+}
+
+.layout-pyramid-4 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    ". p1 ."
+    "p2 . p3"
+    ". p4 .";
+}
+
+.layout-path-5 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto auto auto;
+  grid-template-areas:
+    ". now ."
+    "block . resource"
+    ". action ."
+    ". goal .";
+}
+
+/* 维纳斯之爱：中轴四牌 + 左右各二（参考标准 ♀ 形三列） */
+.layout-venus-8 {
+  grid-template-columns: 1fr minmax(158px, 1fr) 1fr;
+  grid-template-rows: repeat(5, auto);
+  grid-template-areas:
+    ". v4 ."
+    "v1 . v2"
+    ". v3 ."
+    "v7 v5 v8"
+    ". v6 .";
+  gap: 10px 10px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.layout-seasons-4 {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-areas: "spring summer autumn winter";
+}
+
+.layout-pair-2 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-areas: "left right";
 }

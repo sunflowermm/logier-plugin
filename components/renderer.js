@@ -1,5 +1,6 @@
 import { Plugin_Name } from './constants.js'
 import Data from './Data.js'
+import Version from './Version.js'
 import puppeteer from '../../../lib/puppeteer/puppeteer.js'
 import { FileUtils } from '../../../lib/utils/file-utils.js'
 

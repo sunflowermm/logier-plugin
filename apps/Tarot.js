@@ -1,16 +1,16 @@
 import plugin from '../../../lib/plugins/plugin.js'
-import setting from '../model/setting.js'
 import render from '../components/renderer.js'
+import { getTarotConfig } from '../model/tarot-config.js'
 import {
   drawSingle,
   drawSpread,
-  drawPair,
   drawMajorRainbow,
   drawLookup,
   drawDaily,
   listFormationsText,
   listHelpText,
   listCardIndex,
+  parseSpreadInput,
   resolveFormation,
   toCardView,
   toSpreadView
@@ -24,10 +24,6 @@ function tarotArg (msg, cmd) {
 
 function nickname (e) {
   return e.nickname || e.sender?.card || e.sender?.nickname || '旅人'
-}
-
-function renderTarot (tpl, view, e) {
-  return render(tpl, view, { e })
 }
 
 export class TextMsg extends plugin {
@@ -51,10 +47,6 @@ export class TextMsg extends plugin {
         { reg: '^#塔罗$', fnc: '塔罗牌' }
       ]
     })
-  }
-
-  get defaultFormation () {
-    return setting.getConfig('Tarot')?.defaultFormation || DEFAULT_FORMATION
   }
 
   async 塔罗帮助 () {
@@ -83,20 +75,18 @@ export class TextMsg extends plugin {
       await e.reply(`未找到「${query}」，发送 #塔罗牌库 查看`)
       return true
     }
-    return renderTarot('tarot/card', toCardView(draw, `#查牌 · ${draw.card.name_cn}`, { mode: 'lookup' }), e)
+    return render('tarot/card', toCardView(draw, `#查牌 · ${draw.card.name_cn}`, { mode: 'lookup' }), { e })
   }
 
   async 每日塔罗 (e) {
     const draw = await drawDaily(e.user_id)
     const tag = draw.cached ? '（今日已抽）' : ''
-    return renderTarot('tarot/card', toCardView(draw, `${nickname(e)} · 每日塔罗${tag}`), e)
+    return render('tarot/card', toCardView(draw, `${nickname(e)} · 每日塔罗${tag}`), { e })
   }
 
   async 二牌 (e) {
     const topic = tarotArg(e.msg, '二牌')
-    const spread = drawPair()
-    const title = topic ? `${nickname(e)} · ${topic}` : `${nickname(e)} · 二牌阵`
-    return renderTarot('tarot/spread', toSpreadView(spread, title), e)
+    return this.runSpread(e, '二牌', topic)
   }
 
   async 塔罗牌 (e) {
@@ -104,27 +94,26 @@ export class TextMsg extends plugin {
     if (topic) {
       const lookup = drawLookup(topic)
       if (lookup) {
-        return renderTarot('tarot/card', toCardView(lookup, `${nickname(e)} · ${lookup.card.name_cn}`), e)
+        return render('tarot/card', toCardView(lookup, `${nickname(e)} · ${lookup.card.name_cn}`), { e })
       }
     }
     const title = topic ? `${nickname(e)} · ${topic}` : `${nickname(e)} · 单牌`
-    return renderTarot('tarot/card', toCardView(drawSingle(), title), e)
+    return render('tarot/card', toCardView(drawSingle(), title), { e })
   }
 
   async 占卜 (e) {
     const topic = tarotArg(e.msg, '占卜')
-    return this.runSpread(e, this.defaultFormation, topic)
+    const { defaultFormation } = await getTarotConfig()
+    return this.runSpread(e, defaultFormation || DEFAULT_FORMATION, topic)
   }
 
   async 牌阵 (e) {
     const rest = tarotArg(e.msg, '牌阵')
     if (!rest) {
-      await e.reply('请指定牌阵，例如：#牌阵 圣三角\n#塔罗帮助 查看指令')
+      await e.reply('请指定牌阵，例如：#牌阵 圣三角 我今天高兴吗\n#塔罗帮助 查看指令')
       return true
     }
-    const parts = rest.split(/\s+/)
-    const formationQuery = parts.shift()
-    const topic = parts.join(' ').trim()
+    const { formationQuery, topic } = parseSpreadInput(rest)
     if (!resolveFormation(formationQuery)) {
       await e.reply(`未找到牌阵「${formationQuery}」，#牌阵列表 查看`)
       return true
@@ -138,11 +127,10 @@ export class TextMsg extends plugin {
       await e.reply('牌阵配置异常，请稍后再试')
       return true
     }
-    const title = topic ? `${nickname(e)} · ${topic}` : `${nickname(e)} · ${spread.formationName}`
-    return renderTarot('tarot/spread', toSpreadView(spread, title), e)
+    return render('tarot/spread', toSpreadView(spread, { userName: nickname(e), topic }), { e })
   }
 
   async 彩虹塔罗牌 (e) {
-    return renderTarot('tarot/card', toCardView(drawMajorRainbow(), `${nickname(e)} · 彩虹塔罗`), e)
+    return render('tarot/card', toCardView(drawMajorRainbow(), `${nickname(e)} · 彩虹塔罗`), { e })
   }
 }

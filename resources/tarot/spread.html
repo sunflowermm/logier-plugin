@@ -1,30 +1,60 @@
-{{extend defaultLayout}}
-
-{{block 'css'}}
-<link rel="stylesheet" type="text/css" href="{{_res_path}}tarot/base.css"/>
-<link rel="stylesheet" type="text/css" href="{{_res_path}}tarot/spread.css"/>
-{{/block}}
-
-{{block 'main'}}
-<div class="tarot-spread">
-  <header class="spread-head">
-    {{if title}}<p class="spread-tag">{{title}}</p>{{/if}}
-    <h1 class="spread-name">{{formationName}}</h1>
-    <p class="spread-count">共 {{slotCount}} 张</p>
-  </header>
-  <div class="spread-grid {{gridClass}} {{if compact}}is-compact{{/if}}" style="--slot-card-w: {{cardWidth}}px;">
-    {{each slots slot}}
-    <article class="spread-slot">
-      <div class="slot-role">{{slot.role}}</div>
-      <div class="tarot-card-frame {{if slot.reversed}}is-reversed{{/if}}">
-        <img class="tarot-card-img" src="{{slot.imageUrl}}" alt="{{slot.card.name_cn}}"/>
-      </div>
-      <div class="slot-name">{{slot.card.name_cn}}</div>
-      <div class="slot-meta">{{slot.label}} · {{slot.typeLabel}}</div>
-      <div class="slot-meaning">{{slot.meaning}}</div>
-    </article>
-    {{/each}}
-  </div>
-  <p class="tarot-watermark">Powered by XRK</p>
-</div>
-{{/block}}
+{{extend defaultLayout}}
+
+{{block 'css'}}
+<link rel="stylesheet" type="text/css" href="{{_res_path}}tarot/base.css"/>
+<link rel="stylesheet" type="text/css" href="{{_res_path}}tarot/spread.css"/>
+{{/block}}
+
+{{block 'main'}}
+<div class="tarot-spread">
+  <header class="spread-head">
+    <h1 class="spread-name">{{formationName}}</h1>
+    {{if topic}}
+    <p class="spread-question"><span class="spread-question-label">问事</span>{{topic}}</p>
+    {{/if}}
+    {{if userName}}<p class="spread-user">{{userName}}</p>{{/if}}
+    <p class="spread-count">共 {{slotCount}} 张</p>
+  </header>
+  <div class="spread-grid {{gridClass}}" style="--slot-card-w: {{cardWidth}}px;">
+    {{if crossCenter}}
+    <article class="spread-slot cross-center" style="grid-area: cc1;">
+      <div class="slot-role">{{crossCenter.under.role}} / {{crossCenter.over.role}}</div>
+      <div class="cross-center__stack">
+        <div class="cross-center__under">
+          <div class="tarot-card-frame {{if crossCenter.under.reversed}}is-reversed{{/if}}">
+            <img class="tarot-card-img" src="{{crossCenter.under.imageUrl}}" alt="{{crossCenter.under.title}}"/>
+          </div>
+        </div>
+        <div class="cross-center__over">
+          <div class="tarot-card-frame cross-center__over-frame {{if crossCenter.over.reversed}}is-reversed{{/if}}">
+            <img class="tarot-card-img" src="{{crossCenter.over.imageUrl}}" alt="{{crossCenter.over.title}}"/>
+          </div>
+        </div>
+      </div>
+      <div class="cross-center__over-copy">
+        <div class="slot-name">{{crossCenter.over.title}}</div>
+        <div class="slot-meta">{{crossCenter.over.role}} · {{crossCenter.over.label}} · {{crossCenter.over.typeLabel}}</div>
+        <div class="slot-meaning">{{crossCenter.over.meaning}}</div>
+      </div>
+      <div class="cross-center__detail">
+        <div class="slot-name">{{crossCenter.under.title}}</div>
+        <div class="slot-meta">{{crossCenter.under.role}} · {{crossCenter.under.label}} · {{crossCenter.under.typeLabel}}</div>
+        <div class="slot-meaning">{{crossCenter.under.meaning}}</div>
+      </div>
+    </article>
+    {{/if}}
+    {{each slots slot}}
+    <article class="spread-slot {{slot.slotClass}}" style="grid-area: {{slot.gridArea}};" data-seq="{{slot.seq}}">
+      <div class="slot-role">{{slot.role}}</div>
+      <div class="tarot-card-frame {{if slot.reversed}}is-reversed{{/if}}">
+        <img class="tarot-card-img" src="{{slot.imageUrl}}" alt="{{slot.title}}"/>
+      </div>
+      <div class="slot-name">{{slot.title}}</div>
+      <div class="slot-meta">{{slot.label}} · {{slot.typeLabel}}</div>
+      <div class="slot-meaning">{{slot.meaning}}</div>
+    </article>
+    {{/each}}
+  </div>
+  <p class="tarot-watermark">Powered by XRK</p>
+</div>
+{{/block}}

@@ -1,125 +1,150 @@
 {
   "version": 1.2,
+  "layouts": {
+    "triangle": { "width": 900, "cardWidth": 200, "gridClass": "layout-triangle", "areas": ["t", "bl", "br"] },
+    "timeline-3": { "width": 960, "cardWidth": 200, "gridClass": "layout-timeline-3", "areas": ["p", "n", "f"] },
+    "diamond-4": { "width": 900, "cardWidth": 185, "gridClass": "layout-diamond-4", "areas": ["t", "r", "b", "l"] },
+    "cross-5": { "width": 960, "cardWidth": 170, "gridClass": "layout-cross-5", "areas": ["core", "past", "future", "cause", "result"], "slotUi": ["is-focus", "", "", "", ""] },
+    "gypsy-cross-5": { "width": 960, "cardWidth": 170, "gridClass": "layout-gypsy-cross", "areas": ["top", "bottom", "left", "right", "center"], "slotUi": ["", "", "", "", "is-focus"] },
+    "horseshoe-7": { "width": 1100, "cardWidth": 140, "gridClass": "layout-horseshoe-7", "areas": ["h1", "h2", "h3", "h4", "h5", "h6", "h7"], "slotUi": ["tilt-m18", "tilt-m8", "tilt-p4", "tilt-m26", "tilt-p26", "tilt-p8", "tilt-p18"] },
+    "hexagram-7": { "width": 1100, "cardWidth": 130, "gridClass": "layout-hexagram-7", "areas": ["a", "b", "c", "d", "e", "f", "g"], "slotUi": ["", "", "", "", "", "", "is-focus"] },
+    "fan-4": { "width": 1000, "cardWidth": 170, "gridClass": "layout-fan-4", "areas": ["f1", "f2", "f3", "f4"], "slotUi": ["tilt-m12", "tilt-m4", "tilt-p4", "landscape-f4"] },
+    "hexagon-6": { "width": 1000, "cardWidth": 150, "gridClass": "layout-hexagon-6", "areas": ["s1", "s2", "s3", "s4", "s5", "s6"] },
+    "celtic-cross-10": { "width": 1200, "cardWidth": 115, "gridClass": "layout-celtic-cross", "areas": ["cc1", "cc2", "cc3", "cc4", "cc5", "cc6", "cc7", "cc8", "cc9", "cc10"], "slotUi": ["cross-under", "cross-overlay", "", "", "", "", "", "", "", ""] },
+    "column-3": { "width": 420, "cardWidth": 200, "gridClass": "layout-column-3", "areas": ["c1", "c2", "c3"] },
+    "choice-5": { "width": 1100, "cardWidth": 150, "gridClass": "layout-choice-5", "areas": ["situation", "a1", "a2", "out1", "out2"] },
+    "pyramid-4": { "width": 900, "cardWidth": 185, "gridClass": "layout-pyramid-4", "areas": ["p1", "p2", "p3", "p4"] },
+    "path-5": { "width": 900, "cardWidth": 165, "gridClass": "layout-path-5", "areas": ["now", "block", "resource", "action", "goal"] },
+    "venus-8": { "width": 680, "cardWidth": 158, "gridClass": "layout-venus-8", "areas": ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8"] },
+    "grand-cross-5": { "width": 960, "cardWidth": 170, "gridClass": "layout-grand-cross", "areas": ["gc1", "gc2", "gc3", "gc4", "gc5"], "slotUi": ["", "", "", "", "is-focus"] },
+    "seasons-4": { "width": 960, "cardWidth": 180, "gridClass": "layout-seasons-4", "areas": ["spring", "summer", "autumn", "winter"] },
+    "pair-2": { "width": 720, "cardWidth": 210, "gridClass": "layout-pair-2", "areas": ["left", "right"] }
+  },
   "formations": {
+    "二牌阵": {
+      "layout": "pair-2",
+      "internal": true,
+      "aliases": ["二牌"],
+      "positions": [["现状", "指引"]]
+    },
     "圣三角牌阵": {
-      "cards_num": 3,
-      "is_cut": false,
-      "representations": [
-        [
-          "处境",
-          "行动",
-          "结果"
-        ],
-        [
-          "现状",
-          "愿望",
-          "行动"
-        ]
+      "layout": "triangle",
+      "aliases": ["圣三角", "三角"],
+      "positions": [
+        ["处境", "行动", "结果"],
+        ["现状", "愿望", "行动"]
       ]
     },
     "时间之流牌阵": {
-      "cards_num": 3,
-      "is_cut": true,
-      "representations": [
-        [
-          "过去",
-          "现在",
-          "未来",
-          "问卜者的主观想法"
-        ]
+      "layout": "timeline-3",
+      "aliases": ["时间之流", "时间流", "时间"],
+      "positions": [
+        ["过去", "现在", "未来"]
       ]
     },
     "四要素牌阵": {
-      "cards_num": 4,
-      "is_cut": false,
-      "representations": [
-        [
-          "火，象征行动，行动上的建议",
-          "气，象征言语，言语上的对策",
-          "水，象征感情，感情上的态度",
-          "土，象征物质，物质上的准备"
-        ]
+      "layout": "diamond-4",
+      "aliases": ["四要素", "元素"],
+      "positions": [
+        ["火·行动建议", "气·言语对策", "水·感情态度", "土·物质准备"]
       ]
     },
     "五牌阵": {
-      "cards_num": 5,
-      "is_cut": true,
-      "representations": [
-        [
-          "现在或主要问题",
-          "过去的影响",
-          "未来",
-          "主要原因",
-          "行动可能带来的结果"
-        ]
+      "layout": "cross-5",
+      "aliases": ["五牌", "五张"],
+      "positions": [
+        ["核心问题", "过去影响", "未来趋势", "主要原因", "可能结果"]
       ]
     },
     "吉普赛十字阵": {
-      "cards_num": 5,
-      "is_cut": false,
-      "representations": [
-        [
-          "对方的想法",
-          "你的想法",
-          "相处中存在的问题",
-          "二人目前的环境",
-          "关系发展的结果"
-        ]
+      "layout": "gypsy-cross-5",
+      "aliases": ["吉普赛十字", "吉普赛"],
+      "positions": [
+        ["问卜者心态", "问卜者状况", "建议举措", "周遭环境", "关系结果"]
       ]
     },
     "马蹄牌阵": {
-      "cards_num": 6,
-      "is_cut": true,
-      "representations": [
-        [
-          "现状",
-          "可预知的情况",
-          "不可预知的情况",
-          "即将发生的",
-          "结果",
-          "问卜者的主观想法"
-        ]
+      "layout": "horseshoe-7",
+      "aliases": ["马蹄", "马蹄铁"],
+      "positions": [
+        ["过去影响", "现在状况", "未来走向", "潜在障碍", "外在环境", "行动建议", "最终结果"]
       ]
     },
     "六芒星牌阵": {
-      "cards_num": 7,
-      "is_cut": true,
-      "representations": [
-        [
-          "过去",
-          "现在",
-          "未来",
-          "对策",
-          "环境",
-          "态度",
-          "预测结果"
-        ]
+      "layout": "hexagram-7",
+      "aliases": ["六芒星", "大卫之星"],
+      "positions": [
+        ["过去", "现在", "未来", "对策", "环境", "态度", "预测结果"]
       ]
     },
     "平安扇牌阵": {
-      "cards_num": 4,
-      "is_cut": false,
-      "representations": [
-        [
-          "人际关系现状",
-          "与对方结识的因缘",
-          "双方关系的发展",
-          "双方关系的结论"
-        ]
+      "layout": "fan-4",
+      "aliases": ["平安扇", "扇形"],
+      "positions": [
+        ["关系现状", "结识因缘", "关系发展", "关系结论"]
       ]
     },
     "沙迪若之星牌阵": {
-      "cards_num": 6,
-      "is_cut": true,
-      "representations": [
-        [
-          "问卜者的感受",
-          "问卜者的问题",
-          "问题下的影响因素",
-          "将问卜者与问题纠缠在一起的往事",
-          "需要注意/考虑的",
-          "可能的结果"
-        ]
+      "layout": "hexagon-6",
+      "aliases": ["沙迪若", "沙迪若之星"],
+      "positions": [
+        ["问卜者感受", "问卜者问题", "影响因素", "纠缠往事", "需要注意", "可能结果"]
+      ]
+    },
+    "凯尔特十字牌阵": {
+      "layout": "celtic-cross-10",
+      "aliases": ["凯尔特十字", "凯尔特", "celtic"],
+      "positions": [
+        ["现状", "挑战", "根基", "过去", "目标", "近未来", "自我态度", "外在影响", "希望与恐惧", "最终结果"]
+      ]
+    },
+    "身心灵牌阵": {
+      "layout": "column-3",
+      "aliases": ["身心灵", "身心灵三牌"],
+      "positions": [
+        ["身体·物质层面", "心灵·情感层面", "灵性·意识层面"]
+      ]
+    },
+    "二选一牌阵": {
+      "layout": "choice-5",
+      "aliases": ["二选一", "抉择", "选择"],
+      "positions": [
+        ["当前处境", "选择A", "选择B", "选A的结果", "选B的结果"]
+      ]
+    },
+    "恋人金字塔牌阵": {
+      "layout": "pyramid-4",
+      "aliases": ["恋人金字塔", "爱情金字塔", "恋爱金字塔"],
+      "positions": [
+        ["你的状态", "对方状态", "彼此关系", "关系走向"]
+      ]
+    },
+    "工作发展牌阵": {
+      "layout": "path-5",
+      "aliases": ["工作发展", "事业牌阵", "事业"],
+      "positions": [
+        ["当前处境", "主要障碍", "可用资源", "建议行动", "发展结果"]
+      ]
+    },
+    "维纳斯之爱牌阵": {
+      "layout": "venus-8",
+      "aliases": ["维纳斯之爱", "维纳斯", "爱情牌阵"],
+      "positions": [
+        ["自己的真心", "对方的真心", "自己对对方的影响", "对方对自己的影响", "阻碍", "感情的结果", "未来自己的心态", "未来对方的心态"]
+      ]
+    },
+    "大十字牌阵": {
+      "layout": "grand-cross-5",
+      "aliases": ["大十字", "大十字推测"],
+      "positions": [
+        ["外在影响·一", "外在影响·二", "问题原因", "解决策略", "最终结果"]
+      ]
+    },
+    "四季牌阵": {
+      "layout": "seasons-4",
+      "aliases": ["四季", "年运四季"],
+      "positions": [
+        ["春·开端", "夏·发展", "秋·收获", "冬·沉淀"]
       ]
     }
   },

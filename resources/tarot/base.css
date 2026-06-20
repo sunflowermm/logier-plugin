@@ -68,16 +68,22 @@ body.tarot-render .copyright {
   display: none;
 }
 
+body.tarot-render.w-720,
+body.tarot-render.w-720 .container { width: 720px; max-width: 720px; }
+body.tarot-render.w-900,
+body.tarot-render.w-900 .container { width: 900px; max-width: 900px; }
 body.tarot-render.w-960,
 body.tarot-render.w-960 .container { width: 960px; max-width: 960px; }
+body.tarot-render.w-1000,
+body.tarot-render.w-1000 .container { width: 1000px; max-width: 1000px; }
 body.tarot-render.w-1080,
 body.tarot-render.w-1080 .container { width: 1080px; max-width: 1080px; }
+body.tarot-render.w-1100,
+body.tarot-render.w-1100 .container { width: 1100px; max-width: 1100px; }
 body.tarot-render.w-1200,
 body.tarot-render.w-1200 .container { width: 1200px; max-width: 1200px; }
-body.tarot-render.w-1260,
-body.tarot-render.w-1260 .container { width: 1260px; max-width: 1260px; }
-body.tarot-render.w-1320,
-body.tarot-render.w-1320 .container { width: 1320px; max-width: 1320px; }
+body.tarot-render.w-420,
+body.tarot-render.w-420 .container { width: 420px; max-width: 420px; }
 
 .tarot-watermark {
   margin: 14px 0 0;
