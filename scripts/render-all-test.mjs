@@ -36,9 +36,10 @@ const {
   fortuneBodyHtml,
   guaBodyHtml,
   signCardHtml,
-  mediaAvatarOverlay,
   escHtml,
   toFileUrl,
+  qqAvatarDataUrl,
+  avatarBoxHtml,
   CANVAS_SPLIT,
   CANVAS_SIGN
 } = await import('../utils/render-layout.js')
@@ -102,12 +103,12 @@ results.push({
   file: await shotTpl('card-rainbow.png', 'tarot/card', toCardView(drawMajorRainbow(), '彩虹塔罗预览'))
 })
 
-const bg = pickRenderBackground()
+const marryAvatar = await qqAvatarDataUrl(10001)
 
 results.push({
   name: '签到',
   file: await shotHtml('feat-sign.png', signCardHtml({
-    filePath: bg,
+    filePath: pickRenderBackground(),
     header: '<p><span>上午好！</span>预览用户</p><p>好感度+5</p>',
     date: new Date().toLocaleDateString('zh-CN'),
     quote: '生活明朗，万物可爱。',
@@ -120,7 +121,7 @@ const fortune = jrys[0]
 results.push({
   name: '今日运势',
   file: await shotHtml('feat-fortune.png', fortuneSplitHtml({
-    filePath: bg,
+    filePath: pickRenderBackground(),
     titleLines: `<p>预览用户的十五号运势为</p><h2>${escHtml(fortune.fortuneSummary)}</h2><p>${escHtml(fortune.luckyStar)}</p>`,
     bodyHtml: fortuneBodyHtml(fortune.signText, fortune.unsignText)
   }), CANVAS_SPLIT)
@@ -131,7 +132,7 @@ const gua = suangua[0]
 results.push({
   name: '算一卦',
   file: await shotHtml('feat-gua.png', fortuneSplitHtml({
-    filePath: bg,
+    filePath: pickRenderBackground(),
     titleLines: `<p class="sub">预览用户心中所念「测试问事」</p><p class="sub">卦象如下</p><h2>${escHtml(gua.name)}</h2><p class="sub">${escHtml(gua.guachi)}</p>`,
     bodyHtml: guaBodyHtml(gua)
   }), CANVAS_SPLIT)
@@ -140,10 +141,10 @@ results.push({
 results.push({
   name: '今日老婆',
   file: await shotHtml('feat-marry.png', fortuneSplitHtml({
-    filePath: bg,
+    filePath: pickRenderBackground(),
     textRatio: 0.36,
     footerText: '',
-    mediaOverlay: mediaAvatarOverlay('https://q1.qlogo.cn/g?b=qq&nk=10001&s=640'),
+    avatarHtml: avatarBoxHtml(marryAvatar),
     titleLines: '<h2>今日老婆</h2><p class="wife-name">预览群友</p>',
     bodyHtml: '<div class="body fortune"><p>佳偶天成心相印，百年好合乐无边</p></div>'
   }), { ...CANVAS_SPLIT, imageWaitTimeout: 5000 })

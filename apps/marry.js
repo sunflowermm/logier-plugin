@@ -3,8 +3,8 @@ import { screenshotHtmlWithFallback } from '../components/renderer.js'
 import {
   pickRenderBackground,
   fortuneSplitHtml,
-  mediaAvatarOverlay,
-  qqAvatarUrl,
+  avatarBoxHtml,
+  qqAvatarDataUrl,
   escHtml,
   CANVAS_SPLIT
 } from '../utils/render-layout.js'
@@ -84,11 +84,12 @@ async function renderMarry (e, replyMessage, wife) {
     '琴韵谱成同梦语，灯花笑对含羞人'
   ]
   const content = poems[Math.floor(Math.random() * poems.length)]
+  const avatarSrc = await qqAvatarDataUrl(wife.user_id)
   const html = fortuneSplitHtml({
     filePath: pickRenderBackground(),
     textRatio: 0.36,
     footerText: '',
-    mediaOverlay: mediaAvatarOverlay(qqAvatarUrl(wife.user_id)),
+    avatarHtml: avatarBoxHtml(avatarSrc),
     titleLines: `<h2>今日老婆</h2><p class="wife-name">${escHtml(wife.nickname)}</p>`,
     bodyHtml: `<div class="body fortune"><p>${escHtml(content)}</p></div>`
   })

@@ -19,6 +19,21 @@ export function qqAvatarUrl (userId, size = 640) {
   return `https://q1.qlogo.cn/g?b=qq&nk=${userId}&s=${size}`
 }
 
+/** 拉取 QQ 头像并内嵌为 data URL，避免 Puppeteer 截屏时外链加载失败 */
+export async function qqAvatarDataUrl (userId, size = 640) {
+  const url = qqAvatarUrl(userId, size)
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(8000) })
+    if (!res.ok) return url
+    const mime = res.headers.get('content-type')?.split(';')[0]?.trim() || 'image/jpeg'
+    const buf = Buffer.from(await res.arrayBuffer())
+    if (!buf.length) return url
+    return `data:${mime};base64,${buf.toString('base64')}`
+  } catch {
+    return url
+  }
+}
+
 export function pickRenderBackground () {
   return pickGalleryFile(WALL)
 }
@@ -32,6 +47,8 @@ html,body{margin:0;padding:0;width:var(--cw);height:var(--ch);overflow:hidden;fo
 .text p{margin:4px 0;line-height:1.6;color:#444;font-size:0.92rem;text-align:center;}
 .text .sub{font-size:0.84rem;color:#666;}
 .text .wife-name{font-size:1.15rem;font-weight:bold;color:#5c4a32;}
+.avatar-box{width:148px;height:148px;margin:0 auto 14px;border-radius:20px;overflow:hidden;box-shadow:0 8px 24px rgba(92,74,50,0.18);border:3px solid rgba(255,255,255,0.95);flex-shrink:0;}
+.avatar-box img{width:100%;height:100%;object-fit:cover;display:block;}
 .body{box-sizing:border-box;width:100%;margin-top:8px;padding:14px 10px;background:rgba(255,255,255,0.58);border-radius:12px;overflow:hidden;}
 .body.fortune{display:flex;align-items:center;justify-content:center;max-height:58%;writing-mode:vertical-lr;text-orientation:upright;font-size:0.9rem;line-height:1.85;color:#333;}
 .body.fortune p{margin:0 6px;}
@@ -42,8 +59,8 @@ html,body{margin:0;padding:0;width:var(--cw);height:var(--ch);overflow:hidden;fo
 .body.gua .desc{margin:0;font-size:0.72rem;line-height:1.5;color:#666;text-align:center;max-height:24%;overflow:hidden;}
 .footer{margin-top:6px;font-size:0.8rem;color:#999;text-align:center;flex-shrink:0;}
 .media{flex:0 0 var(--iw);height:100%;position:relative;}
-.media-bg{width:100%;height:100%;overflow:hidden;background:#141820;}
-.media-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px 16px;box-sizing:border-box;background:linear-gradient(180deg,rgba(15,23,42,0.05),rgba(15,23,42,0.25));}
+.media-bg{position:absolute;inset:0;z-index:0;width:100%;height:100%;overflow:hidden;background:#141820;}
+.media-overlay{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;padding:24px 16px;box-sizing:border-box;background:linear-gradient(180deg,rgba(15,23,42,0.05),rgba(15,23,42,0.25));}
 .media-overlay img{width:100%;max-width:380px;max-height:88%;object-fit:cover;border-radius:18px;box-shadow:0 16px 44px rgba(0,0,0,0.38);border:4px solid rgba(255,255,255,0.9);}
 `
 
@@ -52,8 +69,14 @@ function coverImgHtml (filePath, boxW, boxH) {
   return `<div class="media-bg"><img src="${lay.url}" style="${lay.imgCss}" alt=""/></div>`
 }
 
+export function avatarBoxHtml (avatarUrl) {
+  const src = String(avatarUrl).startsWith('data:') ? avatarUrl : escHtml(avatarUrl)
+  return `<div class="avatar-box"><img src="${src}" alt=""/></div>`
+}
+
 export function mediaAvatarOverlay (avatarUrl) {
-  return `<div class="media-overlay"><img src="${escHtml(avatarUrl)}" alt=""/></div>`
+  const src = String(avatarUrl).startsWith('data:') ? avatarUrl : escHtml(avatarUrl)
+  return `<div class="media-overlay"><img src="${src}" alt=""/></div>`
 }
 
 /** 左文右图长图（运势 / 算卦 / 老婆） */
@@ -65,6 +88,7 @@ export function fortuneSplitHtml ({
   canvasH = CANVAS_SPLIT.height,
   textRatio = 0.36,
   footerText = '| 相信科学，请勿迷信 |',
+  avatarHtml = '',
   mediaOverlay = ''
 }) {
   const textW = Math.round(canvasW * textRatio)
@@ -74,7 +98,7 @@ export function fortuneSplitHtml ({
 ${FONT_CSS}
 :root{--cw:${canvasW}px;--ch:${canvasH}px;--tw:${textW}px;--iw:${imgW}px;}
 ${SPLIT_CSS}
-</style></head><body><div class="wrap"><div class="text"><div class="text-main">${titleLines}${bodyHtml}</div>${footer}</div><div class="media">${coverImgHtml(filePath, imgW, canvasH)}${mediaOverlay}</div></div></body></html>`
+</style></head><body><div class="wrap"><div class="text"><div class="text-main">${avatarHtml}${titleLines}${bodyHtml}</div>${footer}</div><div class="media">${coverImgHtml(filePath, imgW, canvasH)}${mediaOverlay}</div></div></body></html>`
 }
 
 export function fortuneBodyHtml (signText, unsignText) {
