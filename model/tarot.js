@@ -8,7 +8,7 @@ const tarotData = await readAndParseJSON('../data/tarot.json')
 const CARD_DIR = path.join(pluginResources, 'tarot', 'cards')
 const REDIS_DAILY_PREFIX = 'Yunzai:logier-plugin:tarot:daily'
 
-const TYPE_LABEL = {
+export const TYPE_LABEL = {
   MajorArcana: '大阿卡纳',
   Swords: '宝剑',
   Wands: '权杖',

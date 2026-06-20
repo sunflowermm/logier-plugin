@@ -1,3 +1,4 @@
+import BotUtil from '../../../lib/util.js'
 import {
   TYPE_LABEL,
   listFormationBriefs,
@@ -29,7 +30,7 @@ export async function replyFormationListForward (e) {
     nodes.push(withImage(text, getSpreadPreviewPath(name)))
   }
 
-  await e.reply(await Bot.makeForwardArray(nodes))
+  await BotUtil.makeChatRecord(e, nodes, '鸢尾花 · 牌阵一览')
 }
 
 /** #塔罗牌库 → 合并转发（每张牌编号 + 牌面图） */
@@ -47,5 +48,5 @@ export async function replyCardIndexForward (e) {
     }
   }
 
-  await e.reply(await Bot.makeForwardArray(nodes))
+  await BotUtil.makeChatRecord(e, nodes, '鸢尾花 · 塔罗牌库')
 }

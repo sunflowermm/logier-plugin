@@ -2,7 +2,9 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { FileUtils } from '../../../lib/utils/file-utils.js'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))export async function readAndParseJSON (filePath) {
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+export async function readAndParseJSON (filePath) {
   const abs = path.isAbsolute(filePath) ? filePath : path.join(__dirname, filePath)
   const fileContent = await FileUtils.readFile(abs)
   if (!fileContent) {
