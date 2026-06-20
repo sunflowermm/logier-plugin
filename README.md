@@ -80,103 +80,65 @@ git clone --depth=1 https://github.com/sunflowermm/logier-plugin ./plugins/logie
 
 **凯尔特十字（Waite 标准）**：中心现状竖放 + 挑战横放（横牌半透明叠放，牌名如 `圣杯2 · 横放`）· 右侧权杖列 7→10 自下而上。
 
-## 牌阵渲染预览
+## 渲染预览
 
-由 `scripts/render-all-test.mjs` 预渲染（塔罗 21 张 + 签到/运势/算卦/老婆/帮助 5 张），PNG 保存在 `docs/previews/` 并随仓库发布。改布局后重跑脚本即可更新。
+由 `scripts/render-all-test.mjs` 预渲染，PNG 在 `docs/previews/`。改布局后重跑：
 
 ```bash
 node plugins/logier-plugin/scripts/render-all-test.mjs
 ```
 
-（`render-tarot-test.mjs` 已改为转发到上述脚本，兼容旧命令。）
+| 圣三角牌阵 | 时间之流牌阵 |
+|:---:|:---:|
+| ![圣三角牌阵](./docs/previews/spread-圣三角牌阵.png) | ![时间之流牌阵](./docs/previews/spread-时间之流牌阵.png) |
 
-### 圣三角牌阵
+| 四要素牌阵 | 五牌阵 |
+|:---:|:---:|
+| ![四要素牌阵](./docs/previews/spread-四要素牌阵.png) | ![五牌阵](./docs/previews/spread-五牌阵.png) |
 
-![圣三角牌阵](./docs/previews/spread-圣三角牌阵.png)
+| 吉普赛十字阵 | 马蹄牌阵 |
+|:---:|:---:|
+| ![吉普赛十字阵](./docs/previews/spread-吉普赛十字阵.png) | ![马蹄牌阵](./docs/previews/spread-马蹄牌阵.png) |
 
-### 时间之流牌阵
+| 六芒星牌阵 | 平安扇牌阵 |
+|:---:|:---:|
+| ![六芒星牌阵](./docs/previews/spread-六芒星牌阵.png) | ![平安扇牌阵](./docs/previews/spread-平安扇牌阵.png) |
 
-![时间之流牌阵](./docs/previews/spread-时间之流牌阵.png)
+| 沙迪若之星牌阵 | 凯尔特十字牌阵 |
+|:---:|:---:|
+| ![沙迪若之星牌阵](./docs/previews/spread-沙迪若之星牌阵.png) | ![凯尔特十字牌阵](./docs/previews/spread-凯尔特十字牌阵.png) |
 
-### 四要素牌阵
+| 身心灵牌阵 | 二选一牌阵 |
+|:---:|:---:|
+| ![身心灵牌阵](./docs/previews/spread-身心灵牌阵.png) | ![二选一牌阵](./docs/previews/spread-二选一牌阵.png) |
 
-![四要素牌阵](./docs/previews/spread-四要素牌阵.png)
+| 恋人金字塔牌阵 | 工作发展牌阵 |
+|:---:|:---:|
+| ![恋人金字塔牌阵](./docs/previews/spread-恋人金字塔牌阵.png) | ![工作发展牌阵](./docs/previews/spread-工作发展牌阵.png) |
 
-### 五牌阵
+| 维纳斯之爱牌阵 | 大十字牌阵 |
+|:---:|:---:|
+| ![维纳斯之爱牌阵](./docs/previews/spread-维纳斯之爱牌阵.png) | ![大十字牌阵](./docs/previews/spread-大十字牌阵.png) |
 
-![五牌阵](./docs/previews/spread-五牌阵.png)
+| 四季牌阵 | 二牌阵 |
+|:---:|:---:|
+| ![四季牌阵](./docs/previews/spread-四季牌阵.png) | ![二牌阵](./docs/previews/spread-二牌阵.png) |
 
-### 吉普赛十字阵
+| 单牌 | 查牌 |
+|:---:|:---:|
+| ![单牌](./docs/previews/card-single.png) | ![查牌](./docs/previews/card-lookup.png) |
 
-![吉普赛十字阵](./docs/previews/spread-吉普赛十字阵.png)
+| 彩虹塔罗 | 签到 |
+|:---:|:---:|
+| ![彩虹塔罗](./docs/previews/card-rainbow.png) | ![签到](./docs/previews/feat-sign.png) |
 
-### 马蹄牌阵
-
-![马蹄牌阵](./docs/previews/spread-马蹄牌阵.png)
-
-### 六芒星牌阵
-
-![六芒星牌阵](./docs/previews/spread-六芒星牌阵.png)
-
-### 平安扇牌阵
-
-![平安扇牌阵](./docs/previews/spread-平安扇牌阵.png)
-
-### 沙迪若之星牌阵
-
-![沙迪若之星牌阵](./docs/previews/spread-沙迪若之星牌阵.png)
-
-### 凯尔特十字牌阵
-
-![凯尔特十字牌阵](./docs/previews/spread-凯尔特十字牌阵.png)
-
-### 身心灵牌阵
-
-![身心灵牌阵](./docs/previews/spread-身心灵牌阵.png)
-
-### 二选一牌阵
-
-![二选一牌阵](./docs/previews/spread-二选一牌阵.png)
-
-### 恋人金字塔牌阵
-
-![恋人金字塔牌阵](./docs/previews/spread-恋人金字塔牌阵.png)
-
-### 工作发展牌阵
-
-![工作发展牌阵](./docs/previews/spread-工作发展牌阵.png)
-
-### 维纳斯之爱牌阵
-
-![维纳斯之爱牌阵](./docs/previews/spread-维纳斯之爱牌阵.png)
-
-### 大十字牌阵
-
-![大十字牌阵](./docs/previews/spread-大十字牌阵.png)
-
-### 四季牌阵
-
-![四季牌阵](./docs/previews/spread-四季牌阵.png)
-
-### 二牌阵（`#二牌` 专用）
-
-![二牌阵](./docs/previews/spread-二牌阵.png)
-
-### 单牌 / 查牌 / 彩虹塔罗
-
-| 单牌 | 查牌 | 彩虹塔罗 |
-|:---:|:---:|:---:|
-| ![单牌](./docs/previews/card-single.png) | ![查牌](./docs/previews/card-lookup.png) | ![彩虹塔罗](./docs/previews/card-rainbow.png) |
-
-## 运势与互动预览
-
-| 签到 | 今日运势 | 算一卦 |
-|:---:|:---:|:---:|
-| ![签到](./docs/previews/feat-sign.png) | ![今日运势](./docs/previews/feat-fortune.png) | ![算一卦](./docs/previews/feat-gua.png) |
+| 今日运势 | 算一卦 |
+|:---:|:---:|
+| ![今日运势](./docs/previews/feat-fortune.png) | ![算一卦](./docs/previews/feat-gua.png) |
 
 | 今日老婆 | 鸢尾花帮助 |
 |:---:|:---:|
-| ![今日老婆](./docs/previews/feat-marry.png) | ![帮助](./docs/previews/feat-help.png) |
+| ![今日老婆](./docs/previews/feat-marry.png) | ![鸢尾花帮助](./docs/previews/feat-help.png) |
 
 ## 塔罗模块结构
 
