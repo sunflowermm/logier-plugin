@@ -1,14 +1,8 @@
 import path from 'path'
-import { pathToFileURL, fileURLToPath } from 'url'
+import { fileURLToPath } from 'url'
 import { FileUtils } from '../../../lib/utils/file-utils.js'
-import { pluginRoot } from '../model/path.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
-export function pluginAssetUrl (relativePath) {
-  return pathToFileURL(path.join(pluginRoot, relativePath)).href
-}
-
 export async function readAndParseJSON (filePath) {
   const abs = path.isAbsolute(filePath) ? filePath : path.join(__dirname, filePath)
   const fileContent = await FileUtils.readFile(abs)

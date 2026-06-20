@@ -49,7 +49,7 @@ function buildRenderData (params, renderOpts = {}, scale = 1) {
 }
 
 /** 截图结果 → 可 reply 的图片消息（PuppeteerRenderer 返回 Buffer，须 segment.image） */
-function toReplyImage (img) {
+export function toReplyImage (img) {
   if (!img) return img
   if (typeof img === 'object' && img.type === 'image') return img
   return segment.image(img)

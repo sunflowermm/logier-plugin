@@ -82,11 +82,13 @@ git clone --depth=1 https://github.com/sunflowermm/logier-plugin ./plugins/logie
 
 ## 牌阵渲染预览
 
-由 `scripts/render-tarot-test.mjs` 预渲染，PNG 保存在 `docs/previews/` 并随仓库发布。改布局后重跑脚本即可更新。
+由 `scripts/render-all-test.mjs` 预渲染（塔罗 21 张 + 签到/运势/算卦/老婆/帮助 5 张），PNG 保存在 `docs/previews/` 并随仓库发布。改布局后重跑脚本即可更新。
 
 ```bash
-node plugins/logier-plugin/scripts/render-tarot-test.mjs
+node plugins/logier-plugin/scripts/render-all-test.mjs
 ```
+
+（`render-tarot-test.mjs` 已改为转发到上述脚本，兼容旧命令。）
 
 ### 圣三角牌阵
 
@@ -166,6 +168,16 @@ node plugins/logier-plugin/scripts/render-tarot-test.mjs
 |:---:|:---:|:---:|
 | ![单牌](./docs/previews/card-single.png) | ![查牌](./docs/previews/card-lookup.png) | ![彩虹塔罗](./docs/previews/card-rainbow.png) |
 
+## 运势与互动预览
+
+| 签到 | 今日运势 | 算一卦 |
+|:---:|:---:|:---:|
+| ![签到](./docs/previews/feat-sign.png) | ![今日运势](./docs/previews/feat-fortune.png) | ![算一卦](./docs/previews/feat-gua.png) |
+
+| 今日老婆 | 鸢尾花帮助 |
+|:---:|:---:|
+| ![今日老婆](./docs/previews/feat-marry.png) | ![帮助](./docs/previews/feat-help.png) |
+
 ## 塔罗模块结构
 
 ```
@@ -179,7 +191,7 @@ logier-plugin/
 ├── apps/Tarot.js
 ├── guoba.support.js         # 锅巴下拉选牌阵
 ├── resources/tarot/
-├── scripts/render-tarot-test.mjs
+├── scripts/render-all-test.mjs
 └── docs/previews/*.png
 ```
 
@@ -195,7 +207,7 @@ logier-plugin/
 | `resources/tarot/spread.css` | 牌阵物理布局 |
 | `data/tarot.json` | 牌义、layouts、formations |
 | `docs/previews/` | README 展示用预渲染 PNG |
-| `scripts/render-tarot-test.mjs` | 预渲染脚本 |
+| `scripts/render-all-test.mjs` | 全量预渲染（塔罗 + 运势/签到等） |
 
 ## 原作者与鸣谢
 

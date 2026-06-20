@@ -7,6 +7,7 @@ import render, {
   screenshotHtmlWithFallback,
   replyAtImage,
   atUser,
+  toReplyImage,
   PLUGIN_RENDER_OPTS
 } from './renderer.js'
 
@@ -17,6 +18,7 @@ export {
   screenshotHtmlWithFallback,
   replyAtImage,
   atUser,
+  toReplyImage,
   PLUGIN_RENDER_OPTS,
   Data,
   Version,
