@@ -1,8 +1,0 @@
-.item-list {
-  display: flex;
-  flex-wrap: wrap;
-  transform-origin: 0 0;
-}
-.item-list .item {
-  width: 65px;
-}

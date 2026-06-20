@@ -1,17 +1,21 @@
 import path from 'path'
+import { pathToFileURL, fileURLToPath } from 'url'
 
-const _path = process.cwd().replace(/\\/g, '/')
+const cwd = process.cwd().replace(/\\/g, '/')
+const pluginRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').replace(/\\/g, '/')
+const pluginName = path.basename(pluginRoot)
+const pluginResources = `${pluginRoot}/resources`
 
-// 插件名
-const pluginName = path.basename(path.join(import.meta.url, '../../'))
-// 插件根目录
-const pluginRoot = path.join(_path, 'plugins', pluginName)
-// 插件资源目录
-const pluginResources = path.join(pluginRoot, 'resources')
+export const Path = cwd
+export const Plugin_Name = pluginName
+export const Plugin_Path = `${cwd}/plugins/${pluginName}`
+
+export function pluginAssetUrl (relativePath) {
+  return pathToFileURL(path.join(pluginRoot, relativePath)).href
+}
 
 export {
-  _path,
-  pluginName,
+  cwd as _path,
   pluginRoot,
-  pluginResources,
+  pluginResources
 }

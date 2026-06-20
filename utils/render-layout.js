@@ -1,4 +1,4 @@
-import { pluginAssetUrl } from './getdate.js'
+import { pluginAssetUrl } from '../model/path.js'
 import { layoutForImage, pickGalleryFile, toFileUrl } from './gallery-image.js'
 
 const FONT_CSS = `@font-face{font-family:'HYWH';src:url('${pluginAssetUrl('resources/common/font/HYWH-65W.woff')}') format('woff');}`
@@ -60,8 +60,6 @@ html,body{margin:0;padding:0;width:var(--cw);height:var(--ch);overflow:hidden;fo
 .footer{margin-top:6px;font-size:0.8rem;color:#999;text-align:center;flex-shrink:0;}
 .media{flex:0 0 var(--iw);height:100%;position:relative;}
 .media-bg{position:absolute;inset:0;z-index:0;width:100%;height:100%;overflow:hidden;background:#141820;}
-.media-overlay{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;padding:24px 16px;box-sizing:border-box;background:linear-gradient(180deg,rgba(15,23,42,0.05),rgba(15,23,42,0.25));}
-.media-overlay img{width:100%;max-width:380px;max-height:88%;object-fit:cover;border-radius:18px;box-shadow:0 16px 44px rgba(0,0,0,0.38);border:4px solid rgba(255,255,255,0.9);}
 `
 
 function coverImgHtml (filePath, boxW, boxH) {
@@ -74,11 +72,6 @@ export function avatarBoxHtml (avatarUrl) {
   return `<div class="avatar-box"><img src="${src}" alt=""/></div>`
 }
 
-export function mediaAvatarOverlay (avatarUrl) {
-  const src = String(avatarUrl).startsWith('data:') ? avatarUrl : escHtml(avatarUrl)
-  return `<div class="media-overlay"><img src="${src}" alt=""/></div>`
-}
-
 /** 左文右图长图（运势 / 算卦 / 老婆） */
 export function fortuneSplitHtml ({
   titleLines,
@@ -88,8 +81,7 @@ export function fortuneSplitHtml ({
   canvasH = CANVAS_SPLIT.height,
   textRatio = 0.36,
   footerText = '| 相信科学，请勿迷信 |',
-  avatarHtml = '',
-  mediaOverlay = ''
+  avatarHtml = ''
 }) {
   const textW = Math.round(canvasW * textRatio)
   const imgW = canvasW - textW
@@ -98,7 +90,7 @@ export function fortuneSplitHtml ({
 ${FONT_CSS}
 :root{--cw:${canvasW}px;--ch:${canvasH}px;--tw:${textW}px;--iw:${imgW}px;}
 ${SPLIT_CSS}
-</style></head><body><div class="wrap"><div class="text"><div class="text-main">${avatarHtml}${titleLines}${bodyHtml}</div>${footer}</div><div class="media">${coverImgHtml(filePath, imgW, canvasH)}${mediaOverlay}</div></div></body></html>`
+</style></head><body><div class="wrap"><div class="text"><div class="text-main">${avatarHtml}${titleLines}${bodyHtml}</div>${footer}</div><div class="media">${coverImgHtml(filePath, imgW, canvasH)}</div></div></body></html>`
 }
 
 export function fortuneBodyHtml (signText, unsignText) {

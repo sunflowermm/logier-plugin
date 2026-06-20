@@ -1,8 +1,7 @@
 import path from 'path'
 import { listFormationOptions } from './model/tarot.js'
 import { getTarotConfig, saveTarotConfig } from './model/tarot-config.js'
-
-const pluginRoot = path.join(process.cwd(), 'plugins/logier-plugin')
+import { pluginRoot } from './model/path.js'
 
 export function supportGuoba () {
   const formationOptions = listFormationOptions()

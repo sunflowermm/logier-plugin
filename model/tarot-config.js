@@ -44,8 +44,3 @@ export async function saveTarotConfig (partial) {
   cache = next
   cacheAt = Date.now()
 }
-
-export function invalidateTarotConfigCache () {
-  cache = null
-  cacheAt = 0
-}

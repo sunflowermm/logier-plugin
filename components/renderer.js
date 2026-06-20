@@ -1,4 +1,4 @@
-import { Plugin_Name } from './constants.js'
+import { Plugin_Name } from '../model/path.js'
 import Data from './Data.js'
 import Version from './Version.js'
 import puppeteer from '../../../lib/puppeteer/puppeteer.js'
@@ -30,7 +30,6 @@ function buildRenderData (params, renderOpts = {}, scale = 1) {
     pluResPath: resPath,
     _res_path: resPath,
     _layout_path: layoutPath,
-    _tpl_path: `${_path}/plugins/${Plugin_Name}/resources/common/tpl/`,
     defaultLayout: `${layoutPath}default.html`,
     elemLayout: `${layoutPath}elem.html`,
     pageGotoParams: merged.pageGotoParams ?? { waitUntil: 'load' },
@@ -87,13 +86,6 @@ export async function renderHtmlImage (html, extra = {}) {
     ...extra
   }
   return puppeteer.screenshot(`${Plugin_Name}/inline/render`, data)
-}
-
-export async function screenshotHtml (e, html, extra = {}) {
-  const img = await renderHtmlImage(html, extra)
-  if (!img) return false
-  await replyAtImage(e, toReplyImage(img), extra.replyPrefix)
-  return true
 }
 
 /** 渲染失败时用纯文本兜底（同样带 @） */

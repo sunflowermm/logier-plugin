@@ -52,12 +52,6 @@ body {
   display: inline-block;
   margin-left: 10px;
 }
-.head-box .genshin_logo {
-  position: absolute;
-  top: 1px;
-  right: 15px;
-  width: 97px;
-}
 .head-box .label {
   font-size: 16px;
   text-shadow: 0 0 1px #000, 1px 1px 3px rgba(0, 0, 0, 0.9);

@@ -1,8 +1,9 @@
 import lodash from 'lodash'
 import { FileUtils } from '../../../lib/utils/file-utils.js'
+import { Plugin_Name } from '../model/path.js'
 
 const _path = process.cwd()
-const plugin = 'logier-plugin'
+const plugin = Plugin_Name
 
 const getRoot = (root = '') => {
   if (root === 'root' || root === 'yunzai') return `${_path}/`
