@@ -48,6 +48,13 @@ function buildRenderData (params, renderOpts = {}, scale = 1) {
   }
 }
 
+/** 截图结果 → 可 reply 的图片消息（PuppeteerRenderer 返回 Buffer，须 segment.image） */
+function toReplyImage (img) {
+  if (!img) return img
+  if (typeof img === 'object' && img.type === 'image') return img
+  return segment.image(img)
+}
+
 /** @ 触发者，与图片等同条消息发出 */
 export function atUser (e) {
   return segment.at(e.user_id)
@@ -85,7 +92,7 @@ export async function renderHtmlImage (html, extra = {}) {
 export async function screenshotHtml (e, html, extra = {}) {
   const img = await renderHtmlImage(html, extra)
   if (!img) return false
-  await replyAtImage(e, img, extra.replyPrefix)
+  await replyAtImage(e, toReplyImage(img), extra.replyPrefix)
   return true
 }
 
@@ -93,7 +100,7 @@ export async function screenshotHtml (e, html, extra = {}) {
 export async function screenshotHtmlWithFallback (e, html, textFallback, extra = {}) {
   const img = await renderHtmlImage(html, extra)
   if (img) {
-    await replyAtImage(e, img, extra.replyPrefix)
+    await replyAtImage(e, toReplyImage(img), extra.replyPrefix)
     return true
   }
   if (textFallback) {
@@ -122,11 +129,11 @@ export default async function render (tplPath, params, cfg = {}) {
     FileUtils.writeFileSync(`${saveDir}${tpl}.json`, JSON.stringify(data))
   }
 
-  const base64 = await puppeteer.screenshot(`${Plugin_Name}/${app}/${tpl}`, data)
-  if (base64 && e) {
-    await replyAtImage(e, base64)
+  const img = await puppeteer.screenshot(`${Plugin_Name}/${app}/${tpl}`, data)
+  if (img && e) {
+    await replyAtImage(e, toReplyImage(img))
     return true
   }
-  if (base64) return base64
+  if (img) return img
   return cfg.retMsgId ? true : false
 }
