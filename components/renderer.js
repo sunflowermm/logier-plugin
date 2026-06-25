@@ -14,7 +14,8 @@ export const PLUGIN_RENDER_OPTS = {
   deviceScaleFactor: 2,
   imageWaitTimeout: 3000,
   fontWaitTimeout: 2000,
-  pageGotoParams: { waitUntil: 'load' }
+  // domcontentloaded + waitImages：避免大壁纸 file:// 阻塞 goto；勿用 fullPage（易触发 30s 截图超时）
+  pageGotoParams: { waitUntil: 'domcontentloaded' }
 }
 
 function buildRenderData (params, renderOpts = {}, scale = 1) {
@@ -32,7 +33,7 @@ function buildRenderData (params, renderOpts = {}, scale = 1) {
     _layout_path: layoutPath,
     defaultLayout: `${layoutPath}default.html`,
     elemLayout: `${layoutPath}elem.html`,
-    pageGotoParams: merged.pageGotoParams ?? { waitUntil: 'load' },
+    pageGotoParams: merged.pageGotoParams ?? { waitUntil: 'domcontentloaded' },
     quality: merged.quality ?? 100,
     imgType: merged.imgType ?? 'png',
     deviceScaleFactor: merged.deviceScaleFactor ?? 2,
@@ -75,15 +76,19 @@ export async function replyAtImage (e, img, prefix) {
  */
 export async function renderHtmlImage (html, extra = {}) {
   const saveId = `_inline_${Date.now()}_${Math.random().toString(36).slice(2)}`
+  const fullPage = extra.fullPage === true
   const data = {
     tplFile: INLINE_TPL,
     html,
     saveId,
-    fullPage: extra.fullPage ?? true,
+    fullPage,
     width: extra.width ?? 1280,
     height: extra.height ?? 900,
     ...PLUGIN_RENDER_OPTS,
-    ...extra
+    ...extra,
+    fullPage,
+    // fortuneSplitHtml 等固定画布：按 .wrap 元素截图，比 fullPage 快且稳定
+    selector: extra.selector ?? (fullPage ? undefined : '.wrap')
   }
   return puppeteer.screenshot(`${Plugin_Name}/inline/render`, data)
 }

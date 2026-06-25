@@ -98,6 +98,6 @@ async function renderMarry (e, replyMessage, wife) {
     e,
     html,
     `${wife.nickname}\n${content}`,
-    { ...CANVAS_SPLIT, imageWaitTimeout: 5000, replyPrefix: replyMessage }
+    { ...CANVAS_SPLIT, imageWaitTimeout: 8000, waitFonts: false, replyPrefix: replyMessage }
   )
 }
