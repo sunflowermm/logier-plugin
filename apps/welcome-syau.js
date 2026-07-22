@@ -35,18 +35,9 @@ export class syauNewcomer extends plugin {
   async accept () {
     const e = this.e
     if (Number(e.group_id) !== SYAU_GROUP_ID) return
-    if (e.user_id === e.bot.uin || e.user_id === e.self_id) return
+    if (e.user_id === e.self_id || e.user_id === e.bot?.uin) return
 
-    const cd = 30
-    const key = `Yz:newcomers:${e.group_id}`
-    if (await redis.get(key)) return
-    redis.set(key, '1', { EX: cd })
-
-    const msg = [
-      segment.at(e.user_id),
-      ' ',
-      WELCOME_TEXT
-    ]
+    const msg = [segment.at(e.user_id), ' ', WELCOME_TEXT]
 
     if (FileUtils.existsSync(RULE_IMAGE)) {
       msg.push('\n', segment.image(RULE_IMAGE))
@@ -55,5 +46,7 @@ export class syauNewcomer extends plugin {
     }
 
     await this.reply(msg)
+    // 交由 Loader accept 链：返回 true 不再执行后续「欢迎新人」等
+    return true
   }
 }
