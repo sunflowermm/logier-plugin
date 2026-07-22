@@ -20,7 +20,7 @@ const WELCOME_TEXT = `欢迎加入沈阳农业大学新生官方群！
 2. 禁止广告、传销、无关链接与二维码
 3. 提问请先看群公告 / 群文件，避免重复刷屏
 4. 涉及学校通知以官方渠道为准，谨防诈骗
-5. 完整群规见下方图片，入群即视为已知悉并遵守`
+5. 下图为沈阳农业大学学校地图`
 
 export class syauNewcomer extends plugin {
   constructor () {
