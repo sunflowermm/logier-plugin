@@ -48,6 +48,7 @@ export class newcomer extends plugin {
     /** 回复 */
     await this.reply([
       segment.at(this.e.user_id),
+      ' ',
       msg
     ])
   }
