@@ -1,4 +1,5 @@
 import { readAndParseJSON } from '../utils/getdate.js'
+import { isWelcomeGroupAllowed } from '../model/welcome-config.js'
 import plugin from '../../../lib/plugins/plugin.js'
 
 export class newcomer extends plugin {
@@ -14,20 +15,21 @@ export class newcomer extends plugin {
 
   /** 接受到消息都会执行一次 */
   async accept (e) {
-    /** 定义入群欢迎内容 */
-
     /** 冷却cd 30s */
     let cd = 30
 
     if (this.e.user_id === this.e.bot.uin) return
 
+    // 白名单：仅配置的群发送入群欢迎
+    if (!await isWelcomeGroupAllowed(this.e.group_id)) return
+
     /** cd */
     let key = `Yz:newcomers:${this.e.group_id}`
-    logger.info('key' + key)
     if (await redis.get(key)) return
     redis.set(key, '1', { EX: cd })
 
     let welcome = await readAndParseJSON('../data/welcome.json')
+    if (!Array.isArray(welcome) || welcome.length === 0) return
 
     let nickname
     if (e.nickname) {
@@ -40,8 +42,8 @@ export class newcomer extends plugin {
       nickname = (memberMap && memberMap.get(e.user_id)) ? memberMap.get(e.user_id).nickname : ''
     }
 
-    let randomIndex = Math.floor(Math.random() * welcome.length) // 选择一个随机的欢迎消息
-    let msg = welcome[randomIndex].replace('{0}', nickname) // 将{0}替换为成员的昵称
+    let randomIndex = Math.floor(Math.random() * welcome.length)
+    let msg = welcome[randomIndex].replace('{0}', nickname)
 
     /** 回复 */
     await this.reply([
