@@ -1,5 +1,4 @@
 import { Plugin_Name } from '../model/path.js'
-import Data from './Data.js'
 import Version from './Version.js'
 import puppeteer from '../../../lib/puppeteer/puppeteer.js'
 import { FileUtils } from '../../../lib/utils/file-utils.js'
@@ -7,25 +6,23 @@ import { FileUtils } from '../../../lib/utils/file-utils.js'
 const _path = process.cwd()
 const INLINE_TPL = `./plugins/${Plugin_Name}/resources/common/inline.html`
 
-/** 插件内 HTML / 模板截图默认参数（PNG + 2x DPR） */
+/** 与 RendererLoader / puppeteer-compat 对齐的默认截图参数（勿再加 userTriggered） */
 export const PLUGIN_RENDER_OPTS = {
   quality: 100,
   imgType: 'png',
   deviceScaleFactor: 2,
   imageWaitTimeout: 3000,
   fontWaitTimeout: 2000,
-  // domcontentloaded + waitImages：避免大壁纸 file:// 阻塞 goto；勿用 fullPage（易触发 30s 截图超时）
   pageGotoParams: { waitUntil: 'domcontentloaded' }
 }
 
 function buildRenderData (params, renderOpts = {}, scale = 1) {
   const layoutPath = `${_path}/plugins/${Plugin_Name}/resources/common/layout/`
   const resPath = `../../../../../plugins/${Plugin_Name}/resources/`
-  const merged = { ...PLUGIN_RENDER_OPTS, ...renderOpts }
-
   return {
     ...params,
-    ...merged,
+    ...PLUGIN_RENDER_OPTS,
+    ...renderOpts,
     _plugin: Plugin_Name,
     saveId: params.saveId || params.save_id || 'tpl',
     pluResPath: resPath,
@@ -33,14 +30,6 @@ function buildRenderData (params, renderOpts = {}, scale = 1) {
     _layout_path: layoutPath,
     defaultLayout: `${layoutPath}default.html`,
     elemLayout: `${layoutPath}elem.html`,
-    pageGotoParams: merged.pageGotoParams ?? { waitUntil: 'domcontentloaded' },
-    quality: merged.quality ?? 100,
-    imgType: merged.imgType ?? 'png',
-    deviceScaleFactor: merged.deviceScaleFactor ?? 2,
-    imageWaitTimeout: merged.imageWaitTimeout ?? 3000,
-    fontWaitTimeout: merged.fontWaitTimeout ?? 2000,
-    userTriggered: true,
-    priority: true,
     sys: {
       scale: `style=transform:scale(${scale})`,
       copyright: `XRK-Yunzai<span class="version">${Version.yunzai}</span> & 鸢尾花插件<span class="version">${Version.ver}</span> · 向日葵维护版`
@@ -48,23 +37,14 @@ function buildRenderData (params, renderOpts = {}, scale = 1) {
   }
 }
 
-/** 截图结果 → 可 reply 的图片消息（PuppeteerRenderer 返回 Buffer，须 segment.image） */
-export function toReplyImage (img) {
-  if (!img) return img
-  if (typeof img === 'object' && img.type === 'image') return img
-  return segment.image(img)
-}
-
-/** @ 触发者，与图片等同条消息发出 */
-export function atUser (e) {
+function atUser (e) {
   return segment.at(e.user_id)
 }
 
-/** 合并 @、可选前缀文案与图片为一条消息 */
-export async function replyAtImage (e, img, prefix) {
+async function replyAtImage (e, img, prefix) {
   const msg = [atUser(e)]
   if (prefix != null && prefix !== '') {
-    if (Array.isArray(prefix)) msg.push(...prefix.filter(p => p != null && p !== ''))
+    if (Array.isArray(prefix)) msg.push(...prefix.filter((p) => p != null && p !== ''))
     else msg.push(prefix)
   }
   msg.push(img)
@@ -72,32 +52,29 @@ export async function replyAtImage (e, img, prefix) {
 }
 
 /**
- * 内联 HTML 截图：经 inline.html（{{@html}}）注入，避免整页 HTML 被 art-template 误解析（如 @font-face）。
+ * 内联 HTML → puppeteer.screenshot（compat 已把 Buffer 包成 segment.image）
+ * 经 inline.html 的 {{@html}} 注入，避免 art-template 误解析 @font-face。
  */
 export async function renderHtmlImage (html, extra = {}) {
-  const saveId = `_inline_${Date.now()}_${Math.random().toString(36).slice(2)}`
   const fullPage = extra.fullPage === true
-  const data = {
+  return puppeteer.screenshot(`${Plugin_Name}/inline/render`, {
     tplFile: INLINE_TPL,
     html,
-    saveId,
-    fullPage,
+    saveId: `_inline_${Date.now()}_${Math.random().toString(36).slice(2)}`,
     width: extra.width ?? 1280,
     height: extra.height ?? 900,
     ...PLUGIN_RENDER_OPTS,
     ...extra,
     fullPage,
-    // fortuneSplitHtml 等固定画布：按 .wrap 元素截图，比 fullPage 快且稳定
     selector: extra.selector ?? (fullPage ? undefined : '.wrap')
-  }
-  return puppeteer.screenshot(`${Plugin_Name}/inline/render`, data)
+  })
 }
 
-/** 渲染失败时用纯文本兜底（同样带 @） */
+/** 截图失败则纯文本兜底（同条 @） */
 export async function screenshotHtmlWithFallback (e, html, textFallback, extra = {}) {
   const img = await renderHtmlImage(html, extra)
   if (img) {
-    await replyAtImage(e, toReplyImage(img), extra.replyPrefix)
+    await replyAtImage(e, img, extra.replyPrefix)
     return true
   }
   if (textFallback) {
@@ -107,12 +84,10 @@ export async function screenshotHtmlWithFallback (e, html, textFallback, extra =
   return false
 }
 
+/** 模板截图：plugins/<名>/resources/<app>/<tpl>.html → lib/puppeteer shim */
 export default async function render (tplPath, params, cfg = {}) {
   const [app, tpl] = tplPath.split('/')
   const { e, renderOpts = {}, scale = 1 } = cfg
-
-  Data.createDir(`data/html/${Plugin_Name}/${app}/${tpl}`, 'root')
-
   const data = {
     ...buildRenderData(params, renderOpts, scale),
     tplFile: `./plugins/${Plugin_Name}/resources/${app}/${tpl}.html`,
@@ -128,9 +103,9 @@ export default async function render (tplPath, params, cfg = {}) {
 
   const img = await puppeteer.screenshot(`${Plugin_Name}/${app}/${tpl}`, data)
   if (img && e) {
-    await replyAtImage(e, toReplyImage(img))
+    await replyAtImage(e, img)
     return true
   }
   if (img) return img
-  return cfg.retMsgId ? true : false
+  return Boolean(cfg.retMsgId)
 }
